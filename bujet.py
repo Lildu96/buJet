@@ -1,14 +1,19 @@
 import json
 
+with open("library.json", "r") as file:
+    library = json.load(file)
+    categories = library["categories"]
+
 def parse_money(user_input):
     return float(user_input)
 
 def format_money(amount):
     return f"£{amount:.2f}"
 
-def add_expense(expenses, description, amount):
-    expenses.append({"description": description, "amount": amount})
-    print(f"Added expense: {description}, Amount: {format_money(amount)}")
+def add_expense(expenses, description, amount, categories, category_choice):
+    category_choice = int(description - 1)
+    expenses.append({"description": category_choice, "amount": amount})
+    print(f"Added expense: {category_choice}, Amount: {format_money(amount)}")
 
 def get_total_expenses(expenses):
     total = 0
@@ -68,8 +73,10 @@ def main():
 
         if choice == "1":
             amount = parse_money(input("Enter expense amount: £"))
-            description = input("Enter expense description: ")
-            add_expense(expenses, description, amount)
+            for i, category in enumerate(categories):
+                print(f"{i + 1}. {category}")
+            category_choice = (input("Choose a category: "))
+            add_expense(expenses, category_choice, amount)
         elif choice == "2":
             show_budget_details(budget, expenses)
         elif choice == "3":
