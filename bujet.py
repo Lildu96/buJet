@@ -1,0 +1,87 @@
+import json
+
+def parse_money(user_input):
+    return float(user_input)
+
+def format_money(amount):
+    return f"£{amount:.2f}"
+
+def add_expense(expenses, description, amount):
+    expenses.append({"description": description, "amount": amount})
+    print(f"Added expense: {description}, Amount: {format_money(amount)}")
+
+def get_total_expenses(expenses):
+    total = 0
+    for expense in expenses:
+        total += expense["amount"]
+    return total
+
+def get_balance(budget, expenses):
+    return budget - get_total_expenses(expenses)
+
+def show_budget_details(budget, expenses):
+    print(f"Total Budget: {format_money(budget)}")
+    if not expenses:
+        print("Expenses: None")
+    else:
+        print("Expenses: ")
+        for expense in expenses:
+            print (f"- {expense['description']}: {format_money(expense['amount'])}")
+    print(f"Total Spend: {format_money(get_total_expenses(expenses))}")
+    print(f"Remaining Budget: {format_money(get_balance(budget, expenses))}")
+
+def load_budget_data(filepath):
+    try:
+        with open(filepath, 'r') as file:
+            data = json.load(file)
+            return data["budget"], data["expenses"]
+    except (FileNotFoundError, json.JSONDecodeError):
+        return 0, []
+    
+def save_budget_details(filepath, budget, expenses):
+    data = {
+        'budget': budget,
+        'expenses': expenses
+    }
+    with open(filepath, 'w') as file:
+        json.dump(data, file, indent=4)
+
+def reset_budget_data(filepath):
+    save_budget_details(filepath, 0, [])
+    return 0, []
+    
+def main():
+    print("Welcome to the Budget App")
+    filepath = 'budget_data.json'
+    budget, expenses = load_budget_data(filepath)
+    if budget == 0:
+        budget = parse_money(input("Please enter your initial budget: £"))
+
+
+    while True:
+        print("\nWhat would you like to do?")
+        print("1. Add an expense")
+        print("2. Show budget details")
+        print("3. Exit")
+        print("4. Reset budget data")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            amount = parse_money(input("Enter expense amount: £"))
+            description = input("Enter expense description: ")
+            add_expense(expenses, description, amount)
+        elif choice == "2":
+            show_budget_details(budget, expenses)
+        elif choice == "3":
+            save_budget_details(filepath, budget, expenses)
+            print("Exiting Budget App. CIAO!")
+            break
+        elif choice == "4":
+            budget, expenses = reset_budget_data(filepath)
+            print("Your budget and expenses have been reset")
+            budget = parse_money(input("Please enter your initial budget: £"))
+        else:
+            print("Invalid choice, please choose again.")
+
+if __name__ == "__main__":
+    main()
