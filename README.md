@@ -33,7 +33,7 @@ A personal finance app built with Python, designed to grow into a self-hosted bu
 3. Run:
 
 ```
-python budgetapp.py
+python bujet.py
 ```
 ## Local Data
 
