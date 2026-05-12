@@ -10,12 +10,12 @@ def parse_money(user_input):
 def format_money(amount):
     return f"£{amount:.2f}"
 
-def add_expense(expenses, amount, categories, category_choice):
+def add_expense(expenses, amount, categories, category_choice, description):
     category_choice = int(category_choice) - 1
     chosen_category = categories[category_choice]
 
-    expenses.append({"category": chosen_category, "amount": amount})
-    print(f"Added expense: {chosen_category}, Amount: {format_money(amount)}")
+    expenses.append({"description": description, "category": chosen_category, "amount": amount})
+    print(f"Added expense: {description}, Category: {chosen_category} Amount: {format_money(amount)}")
 
 def get_total_expenses(expenses):
     total = 0
@@ -75,10 +75,11 @@ def main():
 
         if choice == "1":
             amount = parse_money(input("Enter expense amount: £"))
+            description = input("Description: " )
             for i, category in enumerate(categories):
                 print(f"{i + 1}. {category}")
             category_choice = (input("Choose a category: "))
-            add_expense(expenses, amount, categories, category_choice)
+            add_expense(expenses, amount, categories, category_choice, description)
         elif choice == "2":
             show_budget_details(budget, expenses)
         elif choice == "3":
