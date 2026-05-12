@@ -10,10 +10,12 @@ def parse_money(user_input):
 def format_money(amount):
     return f"£{amount:.2f}"
 
-def add_expense(expenses, description, amount, categories, category_choice):
-    category_choice = int(description - 1)
-    expenses.append({"description": category_choice, "amount": amount})
-    print(f"Added expense: {category_choice}, Amount: {format_money(amount)}")
+def add_expense(expenses, amount, categories, category_choice):
+    category_choice = int(category_choice) - 1
+    chosen_category = categories[category_choice]
+
+    expenses.append({"category": chosen_category, "amount": amount})
+    print(f"Added expense: {chosen_category}, Amount: {format_money(amount)}")
 
 def get_total_expenses(expenses):
     total = 0
@@ -31,7 +33,7 @@ def show_budget_details(budget, expenses):
     else:
         print("Expenses: ")
         for expense in expenses:
-            print (f"- {expense['description']}: {format_money(expense['amount'])}")
+            print (f"- {expense['category']}: {format_money(expense['amount'])}")
     print(f"Total Spend: {format_money(get_total_expenses(expenses))}")
     print(f"Remaining Budget: {format_money(get_balance(budget, expenses))}")
 
@@ -76,7 +78,7 @@ def main():
             for i, category in enumerate(categories):
                 print(f"{i + 1}. {category}")
             category_choice = (input("Choose a category: "))
-            add_expense(expenses, category_choice, amount)
+            add_expense(expenses, amount, categories, category_choice)
         elif choice == "2":
             show_budget_details(budget, expenses)
         elif choice == "3":
