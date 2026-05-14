@@ -4,6 +4,11 @@ with open("library.json", "r") as file:
     library = json.load(file)
     categories = library["categories"]
 
+def clear_console():
+    print("\033[H\033[2J", end="")
+    print("\033[H\033[3J", end="")
+    print("\033c", end="")
+
 def parse_money(user_input):
     return float(user_input)
 
@@ -45,12 +50,15 @@ def show_budget_details(budget, expenses):
     category_totals = get_category_totals(expenses)
 
     print(f"Total Budget: {format_money(budget)}")
-
+    print()
+    print("Expenses:")
     for category, total in category_totals.items():
         print (f"- {category}: {format_money(total)}")
 
+    print()
     print(f"Total Spend: {format_money(get_total_expenses(expenses))}")
     print(f"Remaining Budget: {format_money(get_balance(budget, expenses))}")
+    print()
 
 def load_budget_data(filepath):
     try:
@@ -78,9 +86,11 @@ def main():
     budget, expenses = load_budget_data(filepath)
     if budget == 0:
         budget = parse_money(input("Please enter your initial budget: £"))
+    input("Press Enter to continue...")
 
 
     while True:
+        clear_console()
         print("\nWhat would you like to do?")
         print("1. Add an expense")
         print("2. Show budget details")
@@ -89,6 +99,7 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
+            clear_console()
             amount = parse_money(input("Enter expense amount: £"))
             description = input("Description: " )
             for i, category in enumerate(categories):
@@ -96,17 +107,23 @@ def main():
             category_choice = (input("Choose a category: "))
             add_expense(expenses, amount, categories, category_choice, description)
         elif choice == "2":
+            clear_console()
             show_budget_details(budget, expenses)
+            input("Press Enter to continue...")
         elif choice == "3":
+            clear_console()
             save_budget_details(filepath, budget, expenses)
             print("Exiting Budget App. CIAO!")
             break
         elif choice == "4":
+            clear_console()
             budget, expenses = reset_budget_data(filepath)
             print("Your budget and expenses have been reset")
             budget = parse_money(input("Please enter your initial budget: £"))
         else:
+            clear_console()
             print("Invalid choice, please choose again.")
+            input("Press Enter to continue...")
 
 if __name__ == "__main__":
     main()
