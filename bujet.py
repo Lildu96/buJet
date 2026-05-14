@@ -17,6 +17,20 @@ def add_expense(expenses, amount, categories, category_choice, description):
     expenses.append({"description": description, "category": chosen_category, "amount": amount})
     print(f"Added expense: {description}, Category: {chosen_category} Amount: {format_money(amount)}")
 
+def get_category_totals(expenses):
+    category_totals = {}
+    
+    for expense in expenses:
+        category = expense["category"]
+        total = expense["amount"]
+
+        if category in category_totals:
+            category_totals[category] += total
+        else:
+            category_totals[category] = total
+    
+    return category_totals
+
 def get_total_expenses(expenses):
     total = 0
     for expense in expenses:
@@ -27,13 +41,14 @@ def get_balance(budget, expenses):
     return budget - get_total_expenses(expenses)
 
 def show_budget_details(budget, expenses):
+
+    category_totals = get_category_totals(expenses)
+
     print(f"Total Budget: {format_money(budget)}")
-    if not expenses:
-        print("Expenses: None")
-    else:
-        print("Expenses: ")
-        for expense in expenses:
-            print (f"- {expense['category']}: {format_money(expense['amount'])}")
+
+    for category, total in category_totals.items():
+        print (f"- {category}: {format_money(total)}")
+
     print(f"Total Spend: {format_money(get_total_expenses(expenses))}")
     print(f"Remaining Budget: {format_money(get_balance(budget, expenses))}")
 
