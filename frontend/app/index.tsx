@@ -1,11 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
-import AppText from '@/components/AppText'
+import { Pressable, StyleSheet, View } from "react-native";
+import AppText from '@/components/AppText';
+import MainButton from "@/components/MainButton";
 
-function MyButton() {
-  return (
-    <button>I'm a button</button>
-  );
-}
 
 export default function Index() {
   return (
@@ -15,7 +11,7 @@ export default function Index() {
         </View>
 
         <View style={styles.main}>
-          <AppText>Edit app/index.tsx to edit this screen.</AppText>
+          <MainButton title="Add Expense" onPress={() => console.log("Clicked")}/>
         </View>
     </View>
   );
@@ -24,15 +20,15 @@ export default function Index() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#292a36"
+    backgroundColor: "#292a36",
   },
   header: {
     backgroundColor: "#21222c",
-    padding: 60,
+    padding: 50,
     alignItems: "center",
   },
   title: {
-    fontSize: 30
+    fontSize: 50,
   },
   main: {
     flex: 1,
