@@ -1,6 +1,6 @@
 import json
 
-with open("library.json", "r") as file:
+with open("data/library.json", "r") as file:
     library = json.load(file)
     categories = library["categories"]
 
@@ -82,7 +82,7 @@ def reset_budget_data(filepath):
     
 def main():
     print("Welcome to the Budget App")
-    filepath = 'budget_data.json'
+    filepath = 'data/budget_data.json'
     budget, expenses = load_budget_data(filepath)
     if budget == 0:
         budget = parse_money(input("Please enter your initial budget: £"))
