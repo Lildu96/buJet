@@ -11,7 +11,7 @@ export default function Index() {
   return (
     <View style={styles.screen}>
         <View style={styles.header}>
-          <AppText>BuJet</AppText>
+          <AppText style={styles.title}>BuJet</AppText>
         </View>
 
         <View style={styles.main}>
@@ -24,10 +24,15 @@ export default function Index() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: "#292a36"
   },
   header: {
+    backgroundColor: "#21222c",
     padding: 60,
     alignItems: "center",
+  },
+  title: {
+    fontSize: 30
   },
   main: {
     flex: 1,
