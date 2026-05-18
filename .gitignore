@@ -41,7 +41,7 @@ app-example
 
 /backend/data/budget.json
 
-__pycache__/
+/backend/__pycache__/
 *.pyc
 
 # generated native folders
