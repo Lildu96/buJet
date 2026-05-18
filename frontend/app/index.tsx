@@ -1,13 +1,28 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
+import Notification from "@/components/Notification";
 import { resetData } from "@/api/budget_api";
-
+import { useState } from "react";
 
 export default function Index() {
 
+  const [message, setMessage] = useState("");
+
+  const handleResetData = async () => {
+    await resetData();
+
+    setMessage("Budget data reset successfully");
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  };
+
   return (
     <View style={styles.screen}>
+        <Notification message={message}/>
+
         <View style={styles.header}>
           <AppText style={styles.title}>BuJet</AppText>
         </View>
@@ -16,7 +31,7 @@ export default function Index() {
           <MainButton title="Add Expense" onPress={() => console.log("Clicked")}/>
           <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
           <MainButton title="Save" onPress={() => console.log("Clicked")}/>
-          <MainButton title="Reset Data (Dev)" onPress={resetData}/>
+          <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
         </View>
     </View>
   );

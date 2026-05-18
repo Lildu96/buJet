@@ -2,6 +2,7 @@ import { Pressable, StyleSheet } from "react-native";
 import AppText from "./AppText";
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
+
 type MainButtonProps = {
   title: string;
   onPress: () => void;
@@ -56,12 +57,12 @@ const styles = StyleSheet.create({
     buttonActive: {
         shadowColor: "#ff82bb",
         shadowOffset: {
-        width: 0,
-        height: 0,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 20,
-    elevation: 20,
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 20,
+        elevation: 20,
     },
     text: {
         fontSize: 30,
