@@ -41,6 +41,9 @@ app-example
 
 budget.json
 
+__pycache__/
+*.pyc
+
 # generated native folders
 /ios
 /android
