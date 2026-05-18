@@ -1,9 +1,11 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
+import { resetData } from "@/api/budget_api";
 
 
 export default function Index() {
+
   return (
     <View style={styles.screen}>
         <View style={styles.header}>
@@ -14,7 +16,7 @@ export default function Index() {
           <MainButton title="Add Expense" onPress={() => console.log("Clicked")}/>
           <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
           <MainButton title="Save" onPress={() => console.log("Clicked")}/>
-          <MainButton title="Reset Data (Dev)" onPress={() => console.log("Clicked")}/>
+          <MainButton title="Reset Data (Dev)" onPress={resetData}/>
         </View>
     </View>
   );
