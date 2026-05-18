@@ -8,11 +8,18 @@ import { useState } from "react";
 export default function Index() {
 
   const [message, setMessage] = useState("");
+  const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
   const handleResetData = async () => {
-    await resetData();
-
-    setMessage("Budget data reset successfully");
+    try {
+      await resetData();
+  
+      setNotificiationType("success");
+      setMessage("Budget data reset successfully");
+    } catch (error) {
+      setNotificiationType("error");
+      setMessage("Failed to reset budget data")
+    }
 
     setTimeout(() => {
       setMessage("");
@@ -21,7 +28,7 @@ export default function Index() {
 
   return (
     <View style={styles.screen}>
-        <Notification message={message}/>
+        <Notification message={message} type={notificationType}/>
 
         <View style={styles.header}>
           <AppText style={styles.title}>BuJet</AppText>

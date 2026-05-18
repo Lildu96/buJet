@@ -5,8 +5,11 @@ export async function resetData() {
         method: "POST",
     });
 
-    const data = await response.json();
+    if(!response.ok){
+        throw new Error("Failed to reset data");
+    }
 
+    const data = await response.json();
     console.log(data);
 
     return data
