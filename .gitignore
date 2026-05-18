@@ -39,9 +39,9 @@ yarn-error.*
 
 app-example
 
-/backend/data/budget.json
+backend/data/budget.json
 
-/backend/__pycache__/
+backend/__pycache__/
 *.pyc
 
 # generated native folders
