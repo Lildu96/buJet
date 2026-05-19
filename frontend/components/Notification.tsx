@@ -26,9 +26,11 @@ export default function Notification({message, type}: notificationProps) {
     const glowColors =
         type === "success"
             ? {
+                elevation: 20,
                 shadowColor: "#61ea73",
                 boxShadow: "0px 0px 20px #61ea73",
             } : {
+                elevation: 20,
                 shadowColor: "#de5d59",
                 boxShadow: "0px 0px 20px #de5d59",
             };
@@ -72,8 +74,6 @@ const styles = StyleSheet.create({
         bottom: 40,
         alignSelf: "center",
         borderRadius: 10,
-        shadowOpacity: 1,
-        shadowRadius: 20,
         elevation: 20,
     },
 });

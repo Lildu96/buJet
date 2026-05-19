@@ -57,13 +57,8 @@ const styles = StyleSheet.create({
         // maxWidth: 400,
     },
     buttonActive: {
+        boxShadow: '0 0 20px #ff82bb',
         shadowColor: "#ff82bb",
-        shadowOffset: {
-            width: 0,
-            height: 0,
-        },
-        shadowOpacity: 1,
-        shadowRadius: 20,
         elevation: 20,
     },
     text: {

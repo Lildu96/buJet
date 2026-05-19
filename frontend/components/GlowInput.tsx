@@ -11,6 +11,8 @@ export default function GlowInput({ label, ...textInputProps }: GlowInputProps) 
 
     const animatedStyle = useAnimatedStyle(() => ({
         boxShadow: `0 0 ${glow.value * 20}px #9d91ef`,
+        shadowColor: "#9d91ef",
+        elevation: 20,
     }));
 
     return (
