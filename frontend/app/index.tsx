@@ -4,6 +4,7 @@ import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";
 import { resetData } from "@/api/budget_api";
 import { useState } from "react";
+import { router } from "expo-router";
 
 export default function Index() {
 
@@ -35,7 +36,7 @@ export default function Index() {
         </View>
 
         <View style={styles.main}>
-          <MainButton title="Add Expense" onPress={() => console.log("Clicked")}/>
+          <MainButton title="Add Expense" onPress={() => router.push("/add-expense")}/>
           <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
           <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
         </View>
