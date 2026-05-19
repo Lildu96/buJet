@@ -37,7 +37,6 @@ export default function Index() {
         <View style={styles.main}>
           <MainButton title="Add Expense" onPress={() => console.log("Clicked")}/>
           <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
-          <MainButton title="Save" onPress={() => console.log("Clicked")}/>
           <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
         </View>
     </View>

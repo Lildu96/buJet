@@ -53,6 +53,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingVertical: 25,
         paddingHorizontal: 50,
+        // width: "90%",
+        // maxWidth: 400,
     },
     buttonActive: {
         shadowColor: "#ff82bb",
