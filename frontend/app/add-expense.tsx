@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "80%",
     height: "80%",
-    gap: 200,
+    gap: 50,
     borderRadius: 50,
   }
 });

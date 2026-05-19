@@ -36,6 +36,7 @@ export default function GlowInput({ label, ...textInputProps }: GlowInputProps) 
 
 const styles = StyleSheet.create({
     inputContainer: {
+        width: "50%",
         gap: 20,
     },
     inputGlow:{
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 30,
+        alignSelf: "flex-start",
     },
     input: {
         outlineStyle: "none" as any,

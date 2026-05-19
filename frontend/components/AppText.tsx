@@ -17,6 +17,7 @@ export default function AppText({ children, style }: AppTextProps) {
 const styles = StyleSheet.create({
   text: {
     fontFamily: "Geom_600SemiBold",
-    color: "#6672a2"
+    color: "#6672a2",
+    textAlign: "center",
   },
 });

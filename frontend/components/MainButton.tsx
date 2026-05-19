@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 30,
-        textAlign: "center",
     },
     textActive: {
         color: '#f8f8f2'
