@@ -1,29 +1,18 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, TextInput } from "react-native";
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";
+import GlowInput from "@/components/GlowInput"
 import { useState } from "react";
 
 export default function AddExpenseScreen() {
 
+    const [amount, setAmount] = useState("");
+    const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("");
+
     const [message, setMessage] = useState("");
     const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
-
-    const handleResetData = async () => {
-        try {
-            await resetData();
-
-            setNotificiationType("success");
-            setMessage("Expense added successfully");
-        } catch (error) {
-            setNotificiationType("error");
-            setMessage("Failed to add expense")
-        }
-
-        setTimeout(() => {
-            setMessage("");
-        }, 2000);
-    };
   
   return (
     <View style={styles.screen}>
@@ -34,7 +23,10 @@ export default function AddExpenseScreen() {
         </View>
       
         <View style={styles.main}>
-            
+            <View style={styles.form}>
+                <GlowInput label="Amount" value={amount} onChangeText={setAmount} placeholder="£0.00" keyboardType="decimal-pad"/>
+                <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Input"/>
+            </View>
         </View>
     </View>
   );
@@ -56,7 +48,15 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     justifyContent: "center",
-    gap: 50,
     alignItems: "center",
   },
+  form: {
+    backgroundColor: "#21222c",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "80%",
+    height: "80%",
+    gap: 200,
+    borderRadius: 50,
+  }
 });
