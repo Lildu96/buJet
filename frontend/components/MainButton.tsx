@@ -27,7 +27,7 @@ export default function MainButton({ title, onPress}: MainButtonProps) {
     });
 
     return (
-        <Animated.View style={animatedStyle}>
+        <Animated.View style={[styles.buttonWrapper, animatedStyle]}>
             <Pressable 
                 onHoverIn={scaleUp}
                 onHoverOut={scaleDown}
@@ -47,13 +47,17 @@ export default function MainButton({ title, onPress}: MainButtonProps) {
 
 
 const styles = StyleSheet.create({
+    buttonWrapper: {
+        width: "50%",
+    },
     button: {
+        justifyContent: "center",
+        alignItems: "center",
         borderColor: '#f77ec6',
         borderWidth: 2,
         borderRadius: 20,
         paddingVertical: 25,
-        paddingHorizontal: 50,
-        // width: "90%",
+        width: "100%"
         // maxWidth: 400,
     },
     buttonActive: {
@@ -63,6 +67,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 30,
+        textAlign: "center",
     },
     textActive: {
         color: '#f8f8f2'
