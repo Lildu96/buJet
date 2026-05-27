@@ -1,9 +1,11 @@
-import { Pressable, StyleSheet, View, TextInput } from "react-native";
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";
 import GlowInput from "@/components/GlowInput"
+import Dropdown from "@/components/Dropdown";
+import library from "../data/library.json";
 import { useState } from "react";
+import { StyleSheet, View, } from "react-native";
 
 export default function AddExpenseScreen() {
 
@@ -26,6 +28,12 @@ export default function AddExpenseScreen() {
             <View style={styles.form}>
                 <GlowInput label="Amount" value={amount} onChangeText={setAmount} placeholder="£0.00" keyboardType="decimal-pad"/>
                 <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Input"/>
+                <Dropdown
+                    label="Category"
+                    option={library.categories}
+                    selected={category}
+                    onSelect={setCategory}
+                />
             </View>
         </View>
     </View>
