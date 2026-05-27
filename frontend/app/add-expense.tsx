@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
   },
   form: {
     backgroundColor: "#21222c",
-    justifyContent: "center",
+    paddingTop: 50,
+    // justifyContent: "center",
     alignItems: "center",
     width: "80%",
     height: "80%",
