@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   form: {
-    backgroundColor: "#21222c",
+    backgroundColor: "rgb(33, 34, 44)",
     paddingTop: 50,
     paddingBottom: 60,
     alignItems: "center",

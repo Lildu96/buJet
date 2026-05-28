@@ -36,9 +36,11 @@ export default function Index() {
         </View>
 
         <View style={styles.main}>
-          <MainButton title="Add Expense" onPress={() => router.push("/add-expense")}/>
-          <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
-          <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
+          <View style={styles.buttonContainer}>
+            <MainButton title="Add Expense" onPress={() => router.push("/add-expense")}/>
+            <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
+            <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
+          </View>
         </View>
     </View>
   );
@@ -60,7 +62,15 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     justifyContent: "center",
-    gap: 50,
     alignItems: "center",
+  },
+  buttonContainer: {
+    backgroundColor: "rgb(33, 34, 44)",
+    width: "80%",
+    height: "80%",
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 50,
   },
 });
