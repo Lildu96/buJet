@@ -74,7 +74,7 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
                     {option.map((option) => (
                         <Pressable
                             key={option}
-                            style={styles.option}
+                            style={({hovered}) => [styles.option, hovered && styles.optionHovered]}
                             onPress={() => {
                                 onSelect(option);
                                 setDropdown(false);
@@ -130,6 +130,11 @@ const styles = StyleSheet.create({
     option: {
         padding: 20,
     },
+    //Option hovered
+    optionHovered: {
+        backgroundColor: "rgba(33, 34, 44, 0.7)",
+    },
+
     text: {
         fontFamily: "Geom_600SemiBold",
         color: "#6672a2",
