@@ -93,7 +93,6 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 const styles = StyleSheet.create({
     //Entire Container including Label
     inputContainer: {
-        height: 250,
         width: "50%",
         gap: 20,
     },
