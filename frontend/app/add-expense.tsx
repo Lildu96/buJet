@@ -6,15 +6,47 @@ import Dropdown from "@/components/Dropdown";
 import library from "../data/library.json";
 import { useState } from "react";
 import { StyleSheet, View, } from "react-native";
+import { addExpense } from "@/api/budget_api";
 
 export default function AddExpenseScreen() {
 
-    const [amount, setAmount] = useState("");
-    const [description, setDescription] = useState("");
-    const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
-    const [message, setMessage] = useState("");
-    const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
+  const [message, setMessage] = useState("");
+  const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
+
+  const newExpense = {
+    id: Date.now().toString(),
+    amount: Number(amount),
+    description: description,
+    category: category,
+    createdAt: new Date().toISOString(),
+  }
+
+  async function handleAddExpense() {
+    const newExpense ={
+      amount: Number(amount),
+      description,
+      category,
+      createdAt: new Date().toISOString(),
+    }
+
+    try {
+          await addExpense(newExpense);
+      
+          setNotificiationType("success");
+          setMessage("Expenses saved successfully");
+        } catch (error) {
+          setNotificiationType("error");
+          setMessage("Failed to add expense")
+        }
+    
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
+  }
   
   return (
     <View style={styles.screen}>
@@ -27,14 +59,14 @@ export default function AddExpenseScreen() {
         <View style={styles.main}>
             <View style={styles.form}>
                 <GlowInput label="Amount" value={amount} onChangeText={setAmount} placeholder="£0.00" keyboardType="decimal-pad"/>
-                <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Input"/>
+                <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
                 <Dropdown
                     label="Category"
                     option={library.categories}
                     selected={category}
                     onSelect={setCategory}
                 />
-                <MainButton style={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={() => console.log("Clicked")}/>
+                <MainButton style={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
             </View>
         </View>
     </View>

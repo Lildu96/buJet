@@ -66,11 +66,11 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: "rgb(33, 34, 44)",
-    width: "80%",
-    height: "80%",
+    width: "75%",
+    height: "75%",
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    gap: 50,
+    gap: 100,
   },
 });
