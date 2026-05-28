@@ -34,6 +34,7 @@ export default function AddExpenseScreen() {
                     selected={category}
                     onSelect={setCategory}
                 />
+                <MainButton style={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={() => console.log("Clicked")}/>
             </View>
         </View>
     </View>
@@ -66,5 +67,12 @@ const styles = StyleSheet.create({
     width: "80%",
     gap: 50,
     borderRadius: 50,
-  }
+  },
+  button: {
+    paddingVertical: 20,
+    marginTop: 50,
+  },
+  buttonText: {
+    fontSize: 20
+  },
 });

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, StyleProp, ViewStyle, TextStyle } from "react-native";
 import AppText from "./AppText";
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
@@ -6,9 +6,11 @@ import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-nati
 type MainButtonProps = {
   title: string;
   onPress: () => void;
-};
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+}
 
-export default function MainButton({ title, onPress}: MainButtonProps) {
+export default function MainButton({ title, onPress, style, textStyle }: MainButtonProps) {
     const scale = useSharedValue(1);
     const scaleTiming = {
         duration: 150,
@@ -34,10 +36,10 @@ export default function MainButton({ title, onPress}: MainButtonProps) {
                 onPressIn={scaleUp}
                 onPressOut={scaleDown}
                 onPress={onPress}
-                style={({ hovered, pressed }) => [styles.button, (hovered || pressed) && styles.buttonActive,]}
+                style={({ hovered, pressed }) => [styles.button, (hovered || pressed) && styles.buttonActive, style]}
             >
             {({ hovered, pressed }) => (
-                    <AppText style={[styles.text, (hovered || pressed) && styles.textActive,]}>{title}</AppText>
+                    <AppText style={[styles.text, (hovered || pressed) && styles.textActive, textStyle]}>{title}</AppText>
             )}
             </Pressable>
         </Animated.View>
@@ -58,7 +60,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingVertical: 25,
         width: "100%"
-        // maxWidth: 400,
     },
     buttonActive: {
         boxShadow: '0 0 20px #ff82bb',
