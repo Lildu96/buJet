@@ -46,6 +46,11 @@ export default function AddExpenseScreen() {
         setTimeout(() => {
           setMessage("");
         }, 2000);
+    
+    // Reset Form
+    setAmount("");
+    setDescription("");
+    setCategory("");
   }
   
   return (
