@@ -1,7 +1,7 @@
-import { StyleSheet, Pressable, View } from "react-native";
+import { StyleSheet, Pressable, View, TextInput } from "react-native";
 import AppText from "./AppText"
 import Animated, {useAnimatedStyle, useSharedValue, withTiming, runOnJS} from "react-native-reanimated"
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 type DropdownProps = {
     label: string;
@@ -14,6 +14,14 @@ type DropdownProps = {
 
 
 export default function Dropdown({ label, option, selected, onSelect, placeholder = "Select Option" }: DropdownProps) {
+    const [searchText, setSearchText] = useState("");
+    const filteredOptions = option.filter((item) => 
+        item.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const [focused, setFocused] = useState<string | null>(null);
+    const inputRef = useRef<TextInput>(null);
+
     const glow = useSharedValue(0);
     const dropdownHeight = useSharedValue(0);
 
@@ -48,39 +56,59 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
                     runOnJS(setIsMounted)(false);
                 }
             )
-
         }
+    }
 
+    function selectOption(option: string) {
+        onSelect(option);
+        setSearchText("");
+        setDropdown(false);
+        inputRef.current?.blur();
+    }
+
+    function handleFocus(event: any) {
+        const nextFocus = event.relatedTarget;
+
+        if (event.currentTarget.contains(nextFocus)) {
+            return;
+        }
+        console.log(event);
         
+        setDropdown(false);
     }
 
     return (
         <View style={styles.inputContainer}>
             <AppText style={styles.label}>{label}</AppText>
 
-            <Animated.View style={[styles.pressable, animatedStyle,]}>
+            <Animated.View 
+                style={[styles.pressable, animatedStyle,]}
+                onFocus={() => setDropdown(true)}
+                onBlur={handleFocus}
+            >
 
-                <Pressable
+                <TextInput
+                    ref={inputRef}
+                    value={isOpen ? searchText : selected}
+                    placeholder={placeholder}
                     style={[
-                        styles.input, isMounted && styles.inputOpen
+                        styles.input, styles.text, isMounted && styles.inputOpen
                     ]}
-                    onPress={() => setDropdown(!isOpen)}
-                >
-                    <AppText  style={styles.text} >{selected || placeholder}</AppText>
-                </Pressable>
+                    onChangeText={setSearchText}
+                />
 
                 
-                <Animated.ScrollView style={[styles.optionContainer, dropdownAnimatedStyle]} showsVerticalScrollIndicator={false}>
-                    {option.map((option) => (
+                <Animated.ScrollView style={[styles.optionContainer, dropdownAnimatedStyle]} showsVerticalScrollIndicator={false} tabIndex={-1 as any}>
+                    {filteredOptions.map((option) => (
                         <Pressable
                             key={option}
-                            style={({ hovered, pressed }) => [styles.option, (hovered || pressed) && styles.optionActive]}
-                            onPress={() => {
-                                onSelect(option);
-                                setDropdown(false);
-                            }}
+                            focusable={true}
+                            onFocus={() => setFocused(option)}
+                            onBlur={() => setFocused(null)}
+                            style={({ hovered, pressed }) => [styles.option, (hovered || pressed || focused === option) && styles.optionActive]}
+                            onPress={() => selectOption(option)}
                         >
-                            <AppText style={styles.text}>{option}</AppText>
+                            <AppText style={[styles.text, styles.appText]}>{option}</AppText>
                         </Pressable>
                     ))}
                 </Animated.ScrollView>
@@ -106,16 +134,18 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "#9d91ef",
     },
-    //Pressable Dropdown
+    //Searchable Dropdown
     input: {
+        outlineStyle: "none" as any,
         backgroundColor: "rgba(157, 145, 239, 0.2)",
-        borderRadius: 20,
         padding: 20,
+        borderRadius: 20,
     },
     inputOpen: {
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
     },
+
     //Options Box
     optionContainer: {
         backgroundColor: "rgba(157, 145, 239, 0.2)",
@@ -124,10 +154,13 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 0,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
+
+        overflow: "hidden",
     },
     
     //Individual Options
     option: {
+        outlineStyle: "none" as any,
         padding: 20,
     },
     //Option hovered or pressed
@@ -140,6 +173,9 @@ const styles = StyleSheet.create({
         fontFamily: "Geom_600SemiBold",
         color: "#6672a2",
         fontSize: 17,
+    },
+
+    appText: {
         alignSelf: "flex-start",
     }
 });

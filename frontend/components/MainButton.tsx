@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         width: "50%",
     },
     button: {
+        outlineStyle: "none" as any,
         justifyContent: "center",
         alignItems: "center",
         borderColor: '#f77ec6',
