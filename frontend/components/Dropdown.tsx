@@ -39,6 +39,13 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 
     function setDropdown(nextOpen: boolean) {
         if(nextOpen) {
+            setHighlightedIndex(0);
+
+            optionScrollRef.current?.scrollTo({
+                y: 0,
+                animated: true,
+            });
+
             setIsMounted(true);
             setIsOpen(true);
 
@@ -63,7 +70,6 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
         onSelect(option);
         setSearchText("");
         setDropdown(false);
-        inputRef.current?.blur();
     }
 
     function handleFocus(event: any) {
@@ -77,35 +83,76 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
         setDropdown(false);
     }
 
+
+    //Arrow key functionality
+    const optionHeight = 60;
+    const optionScrollRef = useRef<Animated.ScrollView>(null);
+    const [highlightedIndex, setHighlightedIndex] = useState(0);
+
+    const moveHighlight = (direction: "up" | "down") => {
+        setHighlightedIndex((currentIndex) => {
+            let nextIndex = currentIndex;
+
+            if (direction === "down") {
+                nextIndex = currentIndex === filteredOptions.length - 1 ? 0 : currentIndex + 1;
+            }
+            if (direction === "up") {
+                nextIndex = currentIndex === 0 ? filteredOptions.length -1 : currentIndex -1;
+            }
+
+            optionScrollRef.current?.scrollTo({
+                y: nextIndex * optionHeight,
+                animated: true,
+            });
+            
+            return nextIndex
+        });
+    };
+
+    const handleKeyPress = (e: any) => {
+        const key = e.nativeEvent.key;
+
+        if (key === "ArrowDown") {
+            moveHighlight("down");
+        }
+
+        if(key === "ArrowUp") {
+            moveHighlight("up");
+        }
+
+        if (key === "Enter") {
+            selectOption(filteredOptions[highlightedIndex]);
+        }
+    };
+
     return (
         <View style={styles.inputContainer}>
             <AppText style={styles.label}>{label}</AppText>
 
             <Animated.View 
                 style={[styles.pressable, animatedStyle,]}
-                onFocus={() => setDropdown(true)}
                 onBlur={handleFocus}
             >
 
                 <TextInput
                     ref={inputRef}
+                    onFocus={() => setDropdown(true)}
                     value={isOpen ? searchText : selected}
                     placeholder={placeholder}
                     style={[
                         styles.input, styles.text, isMounted && styles.inputOpen
                     ]}
                     onChangeText={setSearchText}
+                    onKeyPress={handleKeyPress}
                 />
 
                 
-                <Animated.ScrollView style={[styles.optionContainer, dropdownAnimatedStyle]} showsVerticalScrollIndicator={false} tabIndex={-1 as any}>
-                    {filteredOptions.map((option) => (
+                <Animated.ScrollView style={[styles.optionContainer, dropdownAnimatedStyle]} showsVerticalScrollIndicator={false} tabIndex={-1 as any} ref={optionScrollRef}>
+                    {filteredOptions.map((option, index) => (
                         <Pressable
+                            tabIndex={-1 as any}
                             key={option}
-                            focusable={true}
-                            onFocus={() => setFocused(option)}
-                            onBlur={() => setFocused(null)}
-                            style={({ hovered, pressed }) => [styles.option, (hovered || pressed || focused === option) && styles.optionActive]}
+                            style={({ hovered, pressed }) => [styles.option, (hovered || pressed || focused === option) && styles.optionActive, index === highlightedIndex && styles.optionActive]}
                             onPress={() => selectOption(option)}
                         >
                             <AppText style={[styles.text, styles.appText]}>{option}</AppText>
