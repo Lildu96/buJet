@@ -1,7 +1,7 @@
 import { StyleSheet, Pressable, View, TextInput } from "react-native";
 import AppText from "./AppText"
-import Animated, {useAnimatedStyle, useSharedValue, withTiming, runOnJS} from "react-native-reanimated"
-import { useState, useRef } from "react";
+import Animated, {useAnimatedStyle, useSharedValue, withTiming, runOnJS, LinearTransition} from "react-native-reanimated"
+import { useState, useRef, useEffect } from "react";
 
 type DropdownProps = {
     label: string;
@@ -27,34 +27,36 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 
     const [isOpen, setIsOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-
+    
     const animatedStyle = useAnimatedStyle(() => ({
         boxShadow: `0 0 ${glow.value * 20}px #9d91ef`,
         elevation: glow.value > 0 ? 20 : 0,
     }));
 
+    
     const dropdownAnimatedStyle = useAnimatedStyle(() => ({
         maxHeight: dropdownHeight.value,
     }));
 
+                
     function setDropdown(nextOpen: boolean) {
         if(nextOpen) {
             setHighlightedIndex(0);
-
+            
             optionScrollRef.current?.scrollTo({
                 y: 0,
                 animated: true,
             });
-
+            
             setIsMounted(true);
             setIsOpen(true);
-
+            
             glow.value = withTiming(1, { duration: 200});
             dropdownHeight.value = withTiming(250, { duration: 250 });
         } else {
-
+            
             setIsOpen(false);
-
+            
             glow.value = withTiming(0, { duration: 200 });
             dropdownHeight.value = withTiming(
                 0,
@@ -74,7 +76,7 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 
     function handleFocus(event: any) {
         const nextFocus = event.relatedTarget;
-
+        
         if (event.currentTarget.contains(nextFocus)) {
             return;
         }
@@ -82,8 +84,8 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
         
         setDropdown(false);
     }
-
-
+    
+    
     //Arrow key functionality
     const optionHeight = 60;
     const optionScrollRef = useRef<Animated.ScrollView>(null);
