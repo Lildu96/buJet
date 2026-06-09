@@ -24,6 +24,8 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 
     const glow = useSharedValue(0);
     const dropdownHeight = useSharedValue(0);
+    const optionHeight = 60;
+    const maxDropdownHeight = optionHeight * 4;
 
     const [isOpen, setIsOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -32,11 +34,22 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
         boxShadow: `0 0 ${glow.value * 20}px #9d91ef`,
         elevation: glow.value > 0 ? 20 : 0,
     }));
-
-    
     const dropdownAnimatedStyle = useAnimatedStyle(() => ({
-        maxHeight: dropdownHeight.value,
+        height: dropdownHeight.value,
     }));
+
+    const updateDropdownHeight = () => {
+        const contentHeight = filteredOptions.length * optionHeight;
+        const targetHeight = Math.min(contentHeight, maxDropdownHeight);
+
+        dropdownHeight.value = withTiming(targetHeight, {duration: 250});
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            updateDropdownHeight();
+        }
+    }, [filteredOptions.length]);
 
                 
     function setDropdown(nextOpen: boolean) {
@@ -50,9 +63,10 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
             
             setIsMounted(true);
             setIsOpen(true);
+            updateDropdownHeight;
             
             glow.value = withTiming(1, { duration: 200});
-            dropdownHeight.value = withTiming(250, { duration: 250 });
+            dropdownHeight.value = withTiming(maxDropdownHeight, { duration: 250 });
         } else {
             
             setIsOpen(false);
@@ -86,8 +100,7 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
     }
     
     
-    //Arrow key functionality
-    const optionHeight = 60;
+    //Arrow key functionality 
     const optionScrollRef = useRef<Animated.ScrollView>(null);
     const [highlightedIndex, setHighlightedIndex] = useState(0);
 
@@ -148,19 +161,20 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
                     onKeyPress={handleKeyPress}
                 />
 
-                
-                <Animated.ScrollView style={[styles.optionContainer, dropdownAnimatedStyle]} showsVerticalScrollIndicator={false} tabIndex={-1 as any} ref={optionScrollRef}>
-                    {filteredOptions.map((option, index) => (
-                        <Pressable
-                            tabIndex={-1 as any}
-                            key={option}
-                            style={({ hovered, pressed }) => [styles.option, (hovered || pressed || focused === option) && styles.optionActive, index === highlightedIndex && styles.optionActive]}
-                            onPress={() => selectOption(option)}
-                        >
-                            <AppText style={[styles.text, styles.appText]}>{option}</AppText>
-                        </Pressable>
-                    ))}
-                </Animated.ScrollView>
+                <Animated.View style={[styles.optionContainer, dropdownAnimatedStyle]}>
+                    <Animated.ScrollView showsVerticalScrollIndicator={false} tabIndex={-1 as any} ref={optionScrollRef}>
+                        {filteredOptions.map((option, index) => (
+                            <Pressable
+                                tabIndex={-1 as any}
+                                key={option}
+                                style={({ hovered, pressed }) => [styles.option, (hovered || pressed || focused === option) && styles.optionActive, index === highlightedIndex && styles.optionActive]}
+                                onPress={() => selectOption(option)}
+                            >
+                                <AppText style={[styles.text, styles.appText]}>{option}</AppText>
+                            </Pressable>
+                        ))}
+                    </Animated.ScrollView>
+                </Animated.View>
                 
             </Animated.View>
         </View>
