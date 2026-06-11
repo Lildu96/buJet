@@ -53,7 +53,7 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 
                 
     function setDropdown(nextOpen: boolean) {
-        if(nextOpen) {
+        if (nextOpen) {
             setHighlightedIndex(0);
             
             optionScrollRef.current?.scrollTo({
@@ -63,23 +63,28 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
             
             setIsMounted(true);
             setIsOpen(true);
-            updateDropdownHeight;
-            
+
             glow.value = withTiming(1, { duration: 200});
-            dropdownHeight.value = withTiming(maxDropdownHeight, { duration: 250 });
-        } else {
+            updateDropdownHeight();
             
-            setIsOpen(false);
-            
-            glow.value = withTiming(0, { duration: 200 });
-            dropdownHeight.value = withTiming(
-                0,
-                { duration: 250 },
-                () => {
-                    runOnJS(setIsMounted)(false);
-                }
-            )
+            return;
         }
+            
+        setIsOpen(false);
+            
+        glow.value = withTiming(0, { duration: 200 });
+        dropdownHeight.value = withTiming(
+        0,
+        { duration: 250 },
+        () => {
+            runOnJS(setIsMounted)(false);
+        }
+    );
+}
+
+    function handleSearch(text: string) {
+        setSearchText(text);
+        setDropdown(true);
     }
 
     function selectOption(option: string) {
@@ -128,6 +133,10 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
         const key = e.nativeEvent.key;
 
         if (key === "ArrowDown") {
+            if (!isOpen) {
+                setDropdown(true);
+                return;
+            }
             moveHighlight("down");
         }
 
@@ -151,13 +160,14 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
 
                 <TextInput
                     ref={inputRef}
-                    onFocus={() => setDropdown(true)}
+                    selectTextOnFocus={false}
+                    onFocus={() => {glow.value = withTiming(1, { duration: 200 });}}
                     value={isOpen ? searchText : selected}
                     placeholder={placeholder}
                     style={[
                         styles.input, styles.text, isMounted && styles.inputOpen
                     ]}
-                    onChangeText={setSearchText}
+                    onChangeText={handleSearch}
                     onKeyPress={handleKeyPress}
                 />
 
