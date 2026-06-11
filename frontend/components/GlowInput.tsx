@@ -3,7 +3,7 @@ import AppText from "./AppText"
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
 type GlowInputProps = TextInputProps & {
-    label: string
+    label: string;
 };
 
 export default function GlowInput({ label, ...textInputProps }: GlowInputProps) {

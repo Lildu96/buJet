@@ -2,6 +2,7 @@ import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";
 import GlowInput from "@/components/GlowInput"
+import CurrencyInput from '@/components/CurrencyInput';
 import Dropdown from "@/components/Dropdown";
 import library from "../data/library.json";
 import { useState } from "react";
@@ -63,15 +64,15 @@ export default function AddExpenseScreen() {
       
         <View style={styles.main}>
             <View style={styles.form}>
-                <GlowInput label="Amount" value={amount} onChangeText={setAmount} placeholder="£0.00" keyboardType="decimal-pad"/>
-                <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
-                <Dropdown
-                    label="Category"
-                    option={library.categories}
-                    selected={category}
-                    onSelect={setCategory}
-                />
-                <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
+              <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount}/>
+              <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
+              <Dropdown
+                  label="Category"
+                  option={library.categories}
+                  selected={category}
+                  onSelect={setCategory}
+              />
+              <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
             </View>
         </View>
     </View>
