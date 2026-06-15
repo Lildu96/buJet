@@ -24,7 +24,7 @@ type ExpenseData = {
 
 type IncomeData = {
     amount: number;
-    description: string;
+    category: string;
     createdAt: string;
 }
 

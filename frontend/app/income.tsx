@@ -2,7 +2,7 @@ import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
 import HomeButton from '@/components/HomeButton';
 import Notification from "@/components/Notification";
-import GlowInput from "@/components/GlowInput"
+import Dropdown from "@/components/Dropdown";
 import CurrencyInput from '@/components/CurrencyInput';
 import { useState } from "react";
 import { StyleSheet, View, } from "react-native";
@@ -10,8 +10,10 @@ import { addIncome } from "@/api/budget_api";
 
 export default function IncomeScreen() {
 
+  const incomeOptions = ["Salary", "Refund", "Other"]
+
   const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
@@ -37,7 +39,7 @@ export default function IncomeScreen() {
 
     const newIncome={
       amount: Number(amount),
-      description,
+      category,
       createdAt: new Date().toISOString(),
     }
 
@@ -45,7 +47,7 @@ export default function IncomeScreen() {
           await addIncome(newIncome);
           // Reset Form
           setAmount("");
-          setDescription("");
+          setCategory("");
 
           setNotificiationType("success");
           setMessage("Income saved successfully");
@@ -72,7 +74,12 @@ export default function IncomeScreen() {
         <View style={styles.main}>
             <View style={styles.form}>
               <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateIncome} error={amountError}/>
-              <GlowInput label="Description" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
+              <Dropdown
+                  label="Category"
+                  option={incomeOptions}
+                  selected={category}
+                  onSelect={setCategory}
+              />
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Income" onPress={handleIncome}/>
             </View>
         </View>
