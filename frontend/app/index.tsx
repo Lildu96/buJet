@@ -39,7 +39,7 @@ export default function Index() {
           <View style={styles.buttonContainer}>
             <MainButton title="Add Income" onPress={() => router.push("/income")}/>
             <MainButton title="Add Expense" onPress={() => router.push("/add-expense")}/>
-            <MainButton title="Budget Details" onPress={() => console.log("Clicked")}/>
+            <MainButton title="Overview" onPress={() => router.push("/overview")}/>
             <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
           </View>
         </View>
