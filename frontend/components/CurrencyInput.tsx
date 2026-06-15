@@ -1,12 +1,14 @@
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 import AppText from "./AppText"
+import FieldError from "./FieldError"
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
 type CurrencyInputProps = TextInputProps & {
     label: string;
+    error?: string;
 };
 
-export default function CurrencyInput({ label, value, onChangeText, ...textInputProps }: CurrencyInputProps) {
+export default function CurrencyInput({ label, value, onChangeText, error, onBlur, ...textInputProps }: CurrencyInputProps) {
     const glow = useSharedValue(0);
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -23,13 +25,7 @@ export default function CurrencyInput({ label, value, onChangeText, ...textInput
             return null;
         }
 
-        const amount = matchAmount[0];
-
-        if (amount === "") {
-            return null;
-        }
-
-        return amount;
+        return matchAmount[0];
     }
 
     function handleAmountChange(text: string) {
@@ -63,12 +59,14 @@ export default function CurrencyInput({ label, value, onChangeText, ...textInput
                         onFocus={() => {
                             glow.value = withTiming(1, {duration: 150,});
                         }}
-                        onBlur={() => {
+                        onBlur={(event) => {
                             glow.value = withTiming(0, {duration: 200,});
+                            onBlur?.(event);
                         }}
                     />
                 </View>
             </Animated.View>
+            <FieldError message={error}/>
         </View>
     );
 }

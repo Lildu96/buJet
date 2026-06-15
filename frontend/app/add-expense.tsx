@@ -18,15 +18,25 @@ export default function AddExpenseScreen() {
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
-  const newExpense = {
-    id: Date.now().toString(),
-    amount: Number(amount),
-    description: description,
-    category: category,
-    createdAt: new Date().toISOString(),
+  const [amountError, setAmountError] = useState("");
+  
+  function validateExpense() {
+    if (!amount) {
+      setAmountError("Please enter an amount");
+      return false;
+    }
+
+    setAmountError("");
+    return true;
   }
 
   async function handleAddExpense() {
+    const isValid = validateExpense();
+
+    if (!isValid) {
+        return;
+    }
+
     const newExpense ={
       amount: Number(amount),
       description,
@@ -64,7 +74,7 @@ export default function AddExpenseScreen() {
       
         <View style={styles.main}>
             <View style={styles.form}>
-              <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount}/>
+              <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateExpense} error={amountError}/>
               <GlowInput label="Decsription" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
               <Dropdown
                   label="Category"

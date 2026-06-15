@@ -19,9 +19,10 @@ export default function GlowInput({ label, ...textInputProps }: GlowInputProps) 
         <View style={styles.inputContainer}>
             <AppText style={styles.label}>{label}</AppText>
             <Animated.View style={[styles.inputGlow, animatedStyle]}>
-                <TextInput 
+                <TextInput
                     style={styles.input} 
                     {...textInputProps}
+                    autoCapitalize="words"
                     onFocus={() => {
                         glow.value = withTiming(1, {duration: 150,});
                     }}
