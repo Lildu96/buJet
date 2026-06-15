@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from budget import reset_budget_data, add_expense
+from budget import reset_budget_data, add_expense, add_income
 
 app = FastAPI()
 
@@ -16,18 +16,27 @@ DATA_FILE = "data/budget.json"
 
 @app.post("/reset-data")
 def reset_data():
-    budget, expenses = reset_budget_data(DATA_FILE)
+    income_data, expense_data = reset_budget_data(DATA_FILE)
 
     return {
-        "budget": budget,
-        "expenses": expenses
+        "income": income_data,
+        "expenses": expense_data
     }
 
 @app.post("/expenses")
-def create_expense(expense: dict):
-    budget, expenses = add_expense(DATA_FILE, expense)
+def create_expense(expense_item: dict):
+    income_data, expense_data = add_expense(DATA_FILE, expense_item)
 
     return {
-        "budget": budget,
-        "expenses": expenses
+        "income": income_data,
+        "expenses": expense_data
+    }
+
+@app.post("/income")
+def create_income(income_item: dict):
+    income_data, expense_data = add_income(DATA_FILE, income_item)
+
+    return {
+        "income": income_data,
+        "expenses": expense_data
     }

@@ -8,7 +8,7 @@ import { useState } from "react";
 import { StyleSheet, View, } from "react-native";
 import { addIncome } from "@/api/budget_api";
 
-export default function AddExpenseScreen() {
+export default function IncomeScreen() {
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -35,7 +35,7 @@ export default function AddExpenseScreen() {
         return;
     }
 
-    const newExpense ={
+    const newIncome={
       amount: Number(amount),
       description,
       createdAt: new Date().toISOString(),
@@ -43,7 +43,10 @@ export default function AddExpenseScreen() {
 
     try {
           await addIncome(newIncome);
-      
+          // Reset Form
+          setAmount("");
+          setDescription("");
+
           setNotificiationType("success");
           setMessage("Income saved successfully");
         } catch (error) {
@@ -55,9 +58,6 @@ export default function AddExpenseScreen() {
           setMessage("");
         }, 2000);
     
-    // Reset Form
-    setAmount("");
-    setDescription("");
   }
   
   return (

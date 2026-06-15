@@ -15,14 +15,36 @@ export async function resetData() {
     return data
 }
 
-type Expense = {
+type ExpenseData = {
     amount: number;
     description: string;
     category: string;
     createdAt: string;
 }
 
-export async function addExpense(expense: Expense) {
+type IncomeData = {
+    amount: number;
+    description: string;
+    createdAt: string;
+}
+
+export async function addIncome(income: IncomeData) {
+    const response = await fetch(`${API_URL}/income`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(income),
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to add income");
+    }
+    const data = await response.json();
+    return data
+}
+
+export async function addExpense(expense: ExpenseData) {
     const response = await fetch(`${API_URL}/expenses`, {
         method: "POST",
         headers: {
@@ -36,7 +58,5 @@ export async function addExpense(expense: Expense) {
     }
 
     const data = await response.json();
-    console.log(data);
-    
     return data
 }

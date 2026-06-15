@@ -47,6 +47,10 @@ export default function AddExpenseScreen() {
 
     try {
           await addExpense(newExpense);
+          // Reset Form
+          setAmount("");
+          setDescription("");
+          setCategory("");
       
           setNotificiationType("success");
           setMessage("Expenses saved successfully");
@@ -58,11 +62,6 @@ export default function AddExpenseScreen() {
         setTimeout(() => {
           setMessage("");
         }, 2000);
-    
-    // Reset Form
-    setAmount("");
-    setDescription("");
-    setCategory("");
   }
   
   return (
