@@ -1,5 +1,6 @@
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
+import HomeButton from '@/components/HomeButton';
 import Notification from "@/components/Notification";
 import GlowInput from "@/components/GlowInput"
 import CurrencyInput from '@/components/CurrencyInput';
@@ -69,7 +70,8 @@ export default function AddExpenseScreen() {
         <Notification message={message} type={notificationType}/>
 
         <View style={styles.header}>
-            <AppText style={styles.title}>Add Expense</AppText>
+          <HomeButton/>
+          <AppText style={styles.title}>Add Expense</AppText>
         </View>
       
         <View style={styles.main}>
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#21222c",
     padding: 50,
-    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 50,

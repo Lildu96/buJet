@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";

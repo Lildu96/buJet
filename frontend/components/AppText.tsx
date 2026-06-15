@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 import { Text, StyleSheet, TextStyle, StyleProp } from "react-native";
 
 type AppTextProps = {
@@ -6,13 +6,17 @@ type AppTextProps = {
     style?: StyleProp<TextStyle>
 }
 
-export default function AppText({ children, style }: AppTextProps) {
-  return (
-    <Text style={[styles.text, style]}>
-      {children}
-    </Text>
-  );
-}
+const AppText = forwardRef<Text, AppTextProps>(
+  ({ children, style }, ref) => {
+    return (
+      <Text ref={ref} style={[styles.text, style]}>
+        {children}
+      </Text>
+    );
+  }
+);
+
+export default AppText;
 
 const styles = StyleSheet.create({
   text: {
