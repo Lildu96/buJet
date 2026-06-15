@@ -64,7 +64,6 @@ export default function CurrencyInput({ label, value, onChangeText, error, onBlu
 const styles = StyleSheet.create({
     inputContainer: {
         width: "50%",
-        gap: 20,
     },
     inputGlow:{
         borderRadius: 20,
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 30,
         alignSelf: "flex-start",
+        marginBottom: 20,
     },
     inputWrapper: {
         backgroundColor: "rgba(157, 145, 239, 0.2)",
