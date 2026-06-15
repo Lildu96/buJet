@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 import AppText from "./AppText"
 import FieldError from "./FieldError"
+import extractAmount from "@/utils/amountUtils"
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
 type CurrencyInputProps = TextInputProps & {
@@ -16,17 +17,6 @@ export default function CurrencyInput({ label, value, onChangeText, error, onBlu
         shadowColor: "#9d91ef",
         elevation: 20,
     }));
-
-    function extractAmount(text: string) {
-        const matchAmount = text.match(/\d+\.?\d{0,2}|\.\d{1,2}/);
-
-
-        if (!matchAmount) {
-            return null;
-        }
-
-        return matchAmount[0];
-    }
 
     function handleAmountChange(text: string) {
         
