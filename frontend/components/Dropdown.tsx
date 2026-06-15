@@ -161,7 +161,7 @@ export default function Dropdown({ label, option, selected, onSelect, placeholde
                 <TextInput
                     ref={inputRef}
                     selectTextOnFocus={false}
-                    onFocus={() => {glow.value = withTiming(1, { duration: 200 });}}
+                    onFocus={() => setDropdown(true)}
                     value={isOpen ? searchText : selected}
                     placeholder={placeholder}
                     style={[
