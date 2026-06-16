@@ -19,8 +19,22 @@ export function usePageTransition() {
     });
   };
 
+  const slideIn = () => {
+    slideX.value = width;
+
+    slideX.value = withTiming(0, { duration: 300 });
+  }
+
+  const slideHome = () => {
+    slideX.value = withTiming(width, { duration: 300 }, () => {
+        runOnJS(router.push)("/");
+    });
+  };
+
   return {
     slideAnimatedStyle,
     slideToPage,
+    slideIn,
+    slideHome,
   };
 }

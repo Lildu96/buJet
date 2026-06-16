@@ -44,7 +44,7 @@ export default function MainButton({ title, onPress, buttonStyle, textStyle, wra
     };
 
     return (
-        <View style={[wrapperStyle, styles.buttonWrapper,]}>
+        <View style={[styles.buttonWrapper, wrapperStyle,]}>
             <Animated.View style={[animatedStyle,]}>
                 <Pressable 
                     onHoverIn={scaleUp}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     pressable: {
-        outlineStyle: "none" as any,      
+        outlineStyle: "none" as any,
     },
     button: {
         outlineStyle: "none" as any,

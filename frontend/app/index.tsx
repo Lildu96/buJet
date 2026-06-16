@@ -5,7 +5,6 @@ import Notification from "@/components/Notification";
 import { resetData } from "@/api/budget_api";
 import { usePageTransition } from "@/utils/pageAnimations";
 import { useState } from "react";
-import { router } from "expo-router";
 import Animated from "react-native-reanimated";
 
 export default function Index() {
@@ -37,7 +36,9 @@ export default function Index() {
         <Notification message={message} type={notificationType}/>
 
         <View style={styles.header}>
-          <AppText style={styles.title}>BuJet</AppText>
+          <Animated.View style={slideAnimatedStyle}>
+            <AppText style={styles.title}>BuJet</AppText>
+          </Animated.View>
         </View>
 
         <View style={styles.main}>
@@ -75,8 +76,10 @@ const styles = StyleSheet.create({
     width: "75%",
     height: "75%",
     borderRadius: 50,
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    gap: 100,
+  },
+  button: {
+    // height: "12%",
   },
 });

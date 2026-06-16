@@ -6,11 +6,19 @@ import GlowInput from "@/components/GlowInput"
 import CurrencyInput from '@/components/CurrencyInput';
 import Dropdown from "@/components/Dropdown";
 import library from "../data/library.json";
-import { useState } from "react";
+import { usePageTransition } from '@/utils/pageAnimations';
+import { useLayoutEffect, useState } from "react";
 import { StyleSheet, View, } from "react-native";
+import Animated from 'react-native-reanimated';
 import { addExpense } from "@/api/budget_api";
 
 export default function AddExpenseScreen() {
+
+  const {slideAnimatedStyle, slideIn } = usePageTransition();
+
+  useLayoutEffect(() => {
+    slideIn();
+  }, []);
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -69,12 +77,14 @@ export default function AddExpenseScreen() {
         <Notification message={message} type={notificationType}/>
 
         <View style={styles.header}>
-          <HomeButton/>
-          <AppText style={styles.title}>Add Expense</AppText>
+          <Animated.View style={[slideAnimatedStyle, styles.headerContent]}>
+            <HomeButton/>
+            <AppText style={styles.title}>Add Expense</AppText>
+          </Animated.View>
         </View>
       
         <View style={styles.main}>
-            <View style={styles.form}>
+            <Animated.View style={[styles.form, slideAnimatedStyle]}>
               <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateExpense} error={amountError}/>
               <GlowInput label="Description" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
               <Dropdown
@@ -84,7 +94,7 @@ export default function AddExpenseScreen() {
                   onSelect={setCategory}
               />
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
-            </View>
+            </Animated.View>
         </View>
     </View>
   );
@@ -98,6 +108,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#21222c",
     padding: 50,
+  },
+  headerContent: {
     justifyContent: "center",
   },
   title: {

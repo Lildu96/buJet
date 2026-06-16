@@ -4,11 +4,19 @@ import HomeButton from '@/components/HomeButton';
 import Notification from "@/components/Notification";
 import Dropdown from "@/components/Dropdown";
 import CurrencyInput from '@/components/CurrencyInput';
-import { useState } from "react";
+import { usePageTransition } from "@/utils/pageAnimations";
+import Animated from "react-native-reanimated";
+import { useLayoutEffect, useState } from "react";
 import { StyleSheet, View, } from "react-native";
 import { addIncome } from "@/api/budget_api";
 
 export default function IncomeScreen() {
+
+  const {slideAnimatedStyle, slideIn } = usePageTransition();
+
+  useLayoutEffect(() => {
+    slideIn();
+  }, []);
 
   const incomeOptions = ["Salary", "Refund", "Other"]
 
@@ -67,12 +75,14 @@ export default function IncomeScreen() {
         <Notification message={message} type={notificationType}/>
 
         <View style={styles.header}>
-          <HomeButton/>
-          <AppText style={styles.title}>Income</AppText>
+          <Animated.View style={[slideAnimatedStyle, styles.headerContent]}>
+            <HomeButton/>
+            <AppText style={styles.title}>Income</AppText>
+          </Animated.View>  
         </View>
       
         <View style={styles.main}>
-            <View style={styles.form}>
+            <Animated.View style={[styles.form, slideAnimatedStyle]}>
               <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateIncome} error={amountError}/>
               <Dropdown
                   label="Category"
@@ -81,7 +91,7 @@ export default function IncomeScreen() {
                   onSelect={setCategory}
               />
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Income" onPress={handleIncome}/>
-            </View>
+            </Animated.View>
         </View>
     </View>
   );
@@ -95,6 +105,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#21222c",
     padding: 50,
+  },
+  headerContent: {
     justifyContent: "center",
   },
   title: {
