@@ -1,13 +1,18 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import AppText from '@/components/AppText';
 import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";
 import { resetData } from "@/api/budget_api";
+import { usePageTransition } from "@/utils/pageAnimations";
 import { useState } from "react";
 import { router } from "expo-router";
+import Animated from "react-native-reanimated";
 
 export default function Index() {
 
+  const {slideAnimatedStyle, slideToPage } = usePageTransition();
+
+  //notifation
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
@@ -36,12 +41,12 @@ export default function Index() {
         </View>
 
         <View style={styles.main}>
-          <View style={styles.buttonContainer}>
-            <MainButton title="Add Income" onPress={() => router.push("/income")}/>
-            <MainButton title="Add Expense" onPress={() => router.push("/add-expense")}/>
-            <MainButton title="Overview" onPress={() => router.push("/overview")}/>
+          <Animated.View style={[styles.buttonContainer, slideAnimatedStyle]}>
+            <MainButton title="Add Income" onPress={() => slideToPage("/income")}/>
+            <MainButton title="Add Expense" onPress={() => slideToPage("/add-expense")}/>
+            <MainButton title="Overview" onPress={() => slideToPage("/overview")}/>
             <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
-          </View>
+          </Animated.View>
         </View>
     </View>
   );

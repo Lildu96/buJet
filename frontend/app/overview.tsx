@@ -6,15 +6,15 @@ import HomeButton from '@/components/HomeButton';
 export default function Overview() {
     return (
         <View style={styles.screen}>
-        {/* <Notification message={message} type={notificationType}/> */}
+            {/* <Notification message={message} type={notificationType}/> */}
 
-        <View style={styles.header}>
-          <HomeButton/>
-          <AppText style={styles.title}>Overview</AppText>
-        </View>
+            <View style={styles.header}>
+                <HomeButton/>
+                <AppText style={styles.title}>Overview</AppText>
+            </View>
 
-        <View style={styles.main}>
-          </View>
+            <View style={styles.main}>
+            </View>
         </View>
   );
 }
@@ -36,14 +36,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  buttonContainer: {
-    backgroundColor: "rgb(33, 34, 44)",
-    width: "75%",
-    height: "75%",
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 100,
-  },
+  }
 });
