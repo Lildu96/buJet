@@ -13,17 +13,21 @@ export function usePageTransition() {
     transform: [{ translateX: slideX.value}],
   }));
 
-    const slideToPage = (page: PageRoute) => {
+  const slideToPage = (page: PageRoute) => {
     slideX.value = withTiming(-width, { duration: 300 }, () => {
-      runOnJS(router.push)(page);
+    runOnJS(router.push)(page);
     });
   };
 
-  const slideIn = () => {
+  const slideInFromRight = () => {
     slideX.value = width;
-
     slideX.value = withTiming(0, { duration: 300 });
   }
+
+  const slideInFromLeft = () => {
+    slideX.value = -width;
+    slideX.value = withTiming(0, { duration: 300});
+  };
 
   const slideHome = () => {
     slideX.value = withTiming(width, { duration: 300 }, () => {
@@ -34,7 +38,8 @@ export function usePageTransition() {
   return {
     slideAnimatedStyle,
     slideToPage,
-    slideIn,
+    slideInFromRight,
+    slideInFromLeft,
     slideHome,
   };
 }

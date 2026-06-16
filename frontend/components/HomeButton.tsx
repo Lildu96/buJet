@@ -1,14 +1,15 @@
 import { Pressable, StyleSheet } from "react-native";
 import AppText from "./AppText";
-import { usePageTransition } from "@/utils/pageAnimations";
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
-import { router } from "expo-router";
 
 const AnimatedAppText = Animated.createAnimatedComponent(AppText);
 
-export default function HomeButton() {
+type HomeButtonProps = {
+    onPress: () => void;
+};
 
-    const { slideHome } = usePageTransition();
+export default function HomeButton({ onPress }: HomeButtonProps) {
+
 
     const glow = useSharedValue(0);
 
@@ -30,7 +31,7 @@ export default function HomeButton() {
     return(
         <Pressable 
             style={styles.pressableContainer}
-            onPress={() => slideHome()}
+            onPress={onPress}
             onHoverIn={glowUp}
             onHoverOut={glowDown}
             onPressIn={glowUp}

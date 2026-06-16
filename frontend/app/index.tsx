@@ -4,12 +4,16 @@ import MainButton from "@/components/MainButton";
 import Notification from "@/components/Notification";
 import { resetData } from "@/api/budget_api";
 import { usePageTransition } from "@/utils/pageAnimations";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import Animated from "react-native-reanimated";
 
 export default function Index() {
 
-  const {slideAnimatedStyle, slideToPage } = usePageTransition();
+  const {slideAnimatedStyle, slideToPage, slideInFromLeft } = usePageTransition();
+
+  useLayoutEffect(() => {
+    slideInFromLeft();
+  }, []);
 
   //notifation
   const [message, setMessage] = useState("");

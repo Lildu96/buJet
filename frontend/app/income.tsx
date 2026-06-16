@@ -12,10 +12,10 @@ import { addIncome } from "@/api/budget_api";
 
 export default function IncomeScreen() {
 
-  const {slideAnimatedStyle, slideIn } = usePageTransition();
+  const {slideAnimatedStyle, slideInFromRight, slideHome } = usePageTransition();
 
   useLayoutEffect(() => {
-    slideIn();
+    slideInFromRight();
   }, []);
 
   const incomeOptions = ["Salary", "Refund", "Other"]
@@ -76,7 +76,7 @@ export default function IncomeScreen() {
 
         <View style={styles.header}>
           <Animated.View style={[slideAnimatedStyle, styles.headerContent]}>
-            <HomeButton/>
+            <HomeButton onPress={slideHome}/>
             <AppText style={styles.title}>Income</AppText>
           </Animated.View>  
         </View>

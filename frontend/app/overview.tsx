@@ -8,10 +8,10 @@ import Animated from "react-native-reanimated";
 
 export default function Overview() {
 
-    const {slideAnimatedStyle, slideIn } = usePageTransition();
+    const {slideAnimatedStyle, slideInFromRight, slideHome } = usePageTransition();
 
     useLayoutEffect(() => {
-    slideIn();
+        slideInFromRight();
     }, []);
 
     return (
@@ -20,7 +20,7 @@ export default function Overview() {
 
             <View style={styles.header}>
                 <Animated.View style={[slideAnimatedStyle, styles.headerContent]}>
-                    <HomeButton/>
+                    <HomeButton onPress={slideHome}/>
                     <AppText style={styles.title}>Overview</AppText>
                 </Animated.View>
             </View>

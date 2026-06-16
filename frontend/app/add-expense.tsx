@@ -14,10 +14,10 @@ import { addExpense } from "@/api/budget_api";
 
 export default function AddExpenseScreen() {
 
-  const {slideAnimatedStyle, slideIn } = usePageTransition();
+  const {slideAnimatedStyle, slideInFromRight, slideHome } = usePageTransition();
 
   useLayoutEffect(() => {
-    slideIn();
+    slideInFromRight();
   }, []);
 
   const [amount, setAmount] = useState("");
@@ -78,7 +78,7 @@ export default function AddExpenseScreen() {
 
         <View style={styles.header}>
           <Animated.View style={[slideAnimatedStyle, styles.headerContent]}>
-            <HomeButton/>
+            <HomeButton onPress={slideHome}/>
             <AppText style={styles.title}>Add Expense</AppText>
           </Animated.View>
         </View>
