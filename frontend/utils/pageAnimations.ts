@@ -5,9 +5,13 @@ import { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-nat
   
 type PageRoute = "/income" | "/add-expense" | "/overview";
 
-export function usePageTransition() {
-    const slideX = useSharedValue(0);
+export function usePageTransition(startFrom = "center") {
     const { width } = useWindowDimensions();
+
+    const slideX = useSharedValue(
+        startFrom === "right" ? width :
+        startFrom === "left" ? -width :
+        0);
 
     const slideAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: slideX.value}],
