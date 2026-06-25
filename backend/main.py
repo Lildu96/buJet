@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from budget import reset_budget_data, add_expense, add_income
+from budget import init_budget_db, add_transaction, load_library, reset_budget_data
 
 app = FastAPI()
+
+init_budget_db()
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,31 +14,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DATA_FILE = "data/budget.json"
+@app.get("/library")
+def get_library():
+    return load_library()
 
 @app.post("/reset-data")
 def reset_data():
-    income_data, expense_data = reset_budget_data(DATA_FILE)
+    reset_budget_data()
 
     return {
-        "income": income_data,
-        "expenses": expense_data
+        "message": "Data reset succesfully"
     }
 
 @app.post("/expenses")
 def create_expense(expense_item: dict):
-    income_data, expense_data = add_expense(DATA_FILE, expense_item)
+    add_transaction(
+        date=expense_item["createdAt"],
+        description=expense_item["description"],
+        amount=expense_item["amount"],
+        transaction_type="expense",
+        account_name="Personal",
+        category_name=expense_item["category"]
+    )
 
     return {
-        "income": income_data,
-        "expenses": expense_data
+        "message": "Expense added"
     }
 
 @app.post("/income")
 def create_income(income_item: dict):
-    income_data, expense_data = add_income(DATA_FILE, income_item)
+    add_transaction(
+        date=income_item["createdAt"],
+        description="",
+        amount=income_item["amount"],
+        transaction_type="income",
+        account_name="Personal",
+        category_name=income_item["category"]
+    )
 
     return {
-        "income": income_data,
-        "expenses": expense_data
+        "message": "Income added"
     }

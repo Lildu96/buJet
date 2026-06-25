@@ -6,9 +6,9 @@ import Dropdown from "@/components/Dropdown";
 import CurrencyInput from '@/components/CurrencyInput';
 import { usePageTransition } from "@/utils/pageAnimations";
 import Animated from "react-native-reanimated";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, useEffect } from "react";
 import { StyleSheet, View, } from "react-native";
-import { addIncome } from "@/api/budget_api";
+import { addIncome, getLibrary } from "@/api/budget_api";
 
 export default function IncomeScreen() {
 
@@ -18,15 +18,24 @@ export default function IncomeScreen() {
     slideInFromRight();
   }, []);
 
-  const incomeOptions = ["Salary", "Refund", "Other"]
-
   const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
   const [amountError, setAmountError] = useState("");
+
+  useEffect(() => {
+      async function loadCategories() {
+        const library = await getLibrary();
+  
+        setCategories(library.incomeCategories);
+      }
+      
+      loadCategories();
+    }, []);
   
   function validateIncome() {
     if (!amount) {
@@ -47,7 +56,7 @@ export default function IncomeScreen() {
 
     const newIncome={
       amount: Number(amount),
-      category,
+      category: selectedCategory,
       createdAt: new Date().toISOString(),
     }
 
@@ -55,7 +64,7 @@ export default function IncomeScreen() {
           await addIncome(newIncome);
           // Reset Form
           setAmount("");
-          setCategory("");
+          setSelectedCategory("");
 
           setNotificiationType("success");
           setMessage("Income saved successfully");
@@ -86,9 +95,9 @@ export default function IncomeScreen() {
               <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateIncome} error={amountError}/>
               <Dropdown
                   label="Category"
-                  option={incomeOptions}
-                  selected={category}
-                  onSelect={setCategory}
+                  option={categories}
+                  selected={selectedCategory}
+                  onSelect={setSelectedCategory}
               />
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Income" onPress={handleIncome}/>
             </Animated.View>

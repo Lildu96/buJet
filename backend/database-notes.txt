@@ -1,0 +1,32 @@
+accounts
+- id
+- name
+- account_type
+- starting_balance
+
+- Personal
+- Budget
+- Jet
+
+categories
+- id
+- name
+- category_type
+
+- Bills
+- Debt
+- Savings
+- Food
+- Travel
+- Health Plan
+- Insurance - Jet
+- Personal Spending
+
+transactions
+- id
+- date
+- description
+- amount
+- type = outgoing/incoming/spending
+- account_id
+- category_ids

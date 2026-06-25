@@ -1,5 +1,15 @@
 const API_URL = "http://127.0.0.1:8000";
 
+export async function getLibrary() {
+    const response = await fetch(`${API_URL}/library`);
+
+    if (!response.ok) {
+        throw new Error("Failed to load library");
+    }
+
+    return await response.json();
+}
+
 export async function resetData() {
     const response = await fetch(`${API_URL}/reset-data`, {
         method: "POST",
