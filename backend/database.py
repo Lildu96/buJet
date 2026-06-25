@@ -119,3 +119,27 @@ def reset_budget_data():
 
     connection.commit()
     connection.close()
+
+def load_overview_data():
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "SELECT SUM(amount) FROM transactions WHERE type = 'income'",
+    )
+    income_total = cursor.fetchone()
+    income_total = income_total[0]
+
+    cursor.execute(
+        "SELECT SUM(amount) FROM transactions WHERE type ='expense'",
+    )
+    expense_total = cursor.fetchone()
+    expense_total = expense_total[0]
+
+    remaining_budget = income_total - expense_total
+
+    print(remaining_budget)
+
+    connection.close()
+
+load_overview_data()

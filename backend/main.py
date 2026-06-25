@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from budget import init_budget_db, add_transaction, load_library, reset_budget_data
+from backend.database import init_budget_db, add_transaction, load_library, reset_budget_data, load_overview_data
 
 app = FastAPI()
 
@@ -55,3 +55,9 @@ def create_income(income_item: dict):
     return {
         "message": "Income added"
     }
+
+@app.get("/overview")
+def get_overview():
+    overview = load_overview_data()
+
+    return overview
