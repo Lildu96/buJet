@@ -127,19 +127,22 @@ def load_overview_data():
     cursor.execute(
         "SELECT SUM(amount) FROM transactions WHERE type = 'income'",
     )
-    income_total = cursor.fetchone()
-    income_total = income_total[0]
+    income_total = cursor.fetchone()[0] or 0
 
     cursor.execute(
         "SELECT SUM(amount) FROM transactions WHERE type ='expense'",
     )
-    expense_total = cursor.fetchone()
-    expense_total = expense_total[0]
+    expense_total = cursor.fetchone()[0] or 0
 
     remaining_budget = income_total - expense_total
-
-    print(remaining_budget)
-
+    
     connection.close()
 
-load_overview_data()
+    return {
+        "income_total": income_total,
+        "expense_total": expense_total,
+        "remaining_budget": income_total - expense_total,
+    }
+
+
+# load_overview_data()
