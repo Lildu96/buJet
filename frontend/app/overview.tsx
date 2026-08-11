@@ -1,17 +1,40 @@
+import { useLayoutEffect, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import AppText from '@/components/AppText';
-import Notification from "@/components/Notification";
-import HomeButton from '@/components/HomeButton';
-import { usePageTransition } from "@/utils/pageAnimations";
-import { useLayoutEffect } from "react";
 import Animated from "react-native-reanimated";
 
+import API_URL from "@/api/budget_api"
+import AppText from '@/components/AppText';
+import HomeButton from '@/components/HomeButton';
+import Notification from "@/components/Notification";
+import { usePageTransition } from "@/utils/pageAnimations";
+
 export default function Overview() {
+
+  const [overview, setOverview] = useState({
+    incomeTotal:0,
+    expenseTotal: 0,
+    remainingBudget: 0,
+  })
+
+  async function loadOverview() {
+    const response = await fetch(`${API_URL}/overview`);
+    const data = await response.json();
+
+    setOverview({
+      incomeTotal: data.income_total,
+      expenseTotal: data.expense_total,
+      remainingBudget: data.remaining_budget,
+    })
+  }
 
     const {slideAnimatedStyle, slideInFromRight, slideHome } = usePageTransition();
 
     useLayoutEffect(() => {
         slideInFromRight();
+    }, []);
+
+    useEffect(() => {
+      loadOverview();
     }, []);
 
     return (
@@ -27,6 +50,11 @@ export default function Overview() {
 
             <View style={styles.main}>
                 <Animated.View style={[styles.dataContainer, slideAnimatedStyle]}>
+                  <View>
+                    <AppText>Income: £{overview.incomeTotal}</AppText>
+                    <AppText>Expenses: £{overview.expenseTotal}</AppText>
+                    <AppText>Remaining: £{overview.remainingBudget}</AppText>
+                  </View>
                 </Animated.View>
             </View>
         </View>

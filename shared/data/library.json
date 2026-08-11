@@ -1,5 +1,5 @@
 {
-  "categories": [
+  "expenseCategories": [
     "Food - Survival",
     "Food - Personal",
     "Petrol",
@@ -10,12 +10,17 @@
     "Bills",
     "Debt",
     "Budget",
-    "Paycheck",
     "Health Plan - Jet",
     "Insurance - Jet",
     "Food - Jet",
     "Personal - Jet",
     "Groom - Jet",
-    "Gifts"
+    "Gift"
+  ],
+  "incomeCategories": [
+    "Gift",
+    "Bills",
+    "Salary",
+    "Refund"
   ]
 }

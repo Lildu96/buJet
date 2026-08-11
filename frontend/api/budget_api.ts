@@ -1,4 +1,25 @@
 const API_URL = "http://127.0.0.1:8000";
+export default API_URL;
+
+export async function getLibrary() {
+    const response = await fetch(`${API_URL}/library`);
+
+    if (!response.ok) {
+        throw new Error("Failed to load library");
+    }
+
+    return await response.json();
+}
+
+export async function getAccounts() {
+    const response = await fetch(`${API_URL}/accounts`);
+
+    if (!response.ok) {
+        throw new Error("Failed to load accounts");
+    }
+
+    return await response.json();
+}
 
 export async function resetData() {
     const response = await fetch(`${API_URL}/reset-data`, {
@@ -18,6 +39,7 @@ export async function resetData() {
 type ExpenseData = {
     amount: number;
     description: string;
+    account: string;
     category: string;
     createdAt: string;
 }

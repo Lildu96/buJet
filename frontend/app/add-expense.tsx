@@ -5,12 +5,16 @@ import Notification from "@/components/Notification";
 import GlowInput from "@/components/GlowInput"
 import CurrencyInput from '@/components/CurrencyInput';
 import Dropdown from "@/components/Dropdown";
-import library from "../data/library.json";
 import { usePageTransition } from '@/utils/pageAnimations';
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, useEffect } from "react";
 import { StyleSheet, View, } from "react-native";
 import Animated from 'react-native-reanimated';
-import { addExpense } from "@/api/budget_api";
+import { addExpense, getLibrary, getAccounts } from "@/api/budget_api";
+
+type Account = {
+  id: number;
+  name: string;
+};
 
 export default function AddExpenseScreen() {
 
@@ -22,12 +26,31 @@ export default function AddExpenseScreen() {
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState("");
+  const accountNames = accounts.map((account) => account.name);
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
   const [amountError, setAmountError] = useState("");
+
+  useEffect(() => {
+    async function loadFormOptions() {
+      const library = await getLibrary();
+      const loadedAccounts = await getAccounts();
+
+      setCategories(library.expenseCategories);
+      setAccounts(loadedAccounts);
+    }
+    
+    loadFormOptions();
+  
+  }, []);
   
   function validateExpense() {
     if (!amount) {
@@ -49,7 +72,8 @@ export default function AddExpenseScreen() {
     const newExpense ={
       amount: Number(amount),
       description,
-      category,
+      category: selectedCategory,
+      account: selectedAccount,
       createdAt: new Date().toISOString(),
     }
 
@@ -58,7 +82,8 @@ export default function AddExpenseScreen() {
           // Reset Form
           setAmount("");
           setDescription("");
-          setCategory("");
+          setSelectedCategory("");
+          setSelectedAccount("");
       
           setNotificiationType("success");
           setMessage("Expenses saved successfully");
@@ -88,10 +113,16 @@ export default function AddExpenseScreen() {
               <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateExpense} error={amountError}/>
               <GlowInput label="Description" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
               <Dropdown
-                  label="Category"
-                  option={library.categories}
-                  selected={category}
-                  onSelect={setCategory}
+                label="Category"
+                option={categories}
+                selected={selectedCategory}
+                onSelect={setSelectedCategory}
+              />
+              <Dropdown
+                label="Account"
+                option={accountNames}
+                selected={selectedAccount}
+                onSelect={setSelectedAccount}
               />
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
             </Animated.View>
