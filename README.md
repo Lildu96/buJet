@@ -33,7 +33,11 @@ A personal finance app built with Python, designed to grow into a self-hosted bu
 3. Run:
 
 ```
-python bujet.py
+cd C:\Users\lildu\Projects\bujet
+python -m uvicorn backend.main:app --reload
+
+cd C:\Users\lildu\Projects\bujet\frontend
+npx expo start
 ```
 ## Local Data
 

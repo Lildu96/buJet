@@ -11,6 +11,16 @@ export async function getLibrary() {
     return await response.json();
 }
 
+export async function getAccounts() {
+    const response = await fetch(`${API_URL}/accounts`);
+
+    if (!response.ok) {
+        throw new Error("Failed to load accounts");
+    }
+
+    return await response.json();
+}
+
 export async function resetData() {
     const response = await fetch(`${API_URL}/reset-data`, {
         method: "POST",
@@ -29,6 +39,7 @@ export async function resetData() {
 type ExpenseData = {
     amount: number;
     description: string;
+    account: string;
     category: string;
     createdAt: string;
 }

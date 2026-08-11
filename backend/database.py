@@ -144,5 +144,28 @@ def load_overview_data():
         "remaining_budget": income_total - expense_total,
     }
 
+def load_accounts():
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "SELECT id, name FROM accounts",
+    )
+
+    accounts = cursor.fetchall()
+
+    formatted_accounts = []
+
+    for account in accounts:
+        account_data = {
+            "id": account[0],
+            "name": account[1],
+        }
+        formatted_accounts.append(account_data)
+
+    connection.close()
+    return formatted_accounts
+    
+
 
 # load_overview_data()

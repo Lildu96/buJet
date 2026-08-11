@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.database import init_budget_db, add_transaction, load_library, reset_budget_data, load_overview_data
+from backend.database import init_budget_db, add_transaction, load_library, reset_budget_data, load_overview_data, load_accounts
 
 app = FastAPI()
 
@@ -33,7 +33,7 @@ def create_expense(expense_item: dict):
         description=expense_item["description"],
         amount=expense_item["amount"],
         transaction_type="expense",
-        account_name="Personal",
+        account_name=expense_item["account"],
         category_name=expense_item["category"]
     )
 
@@ -61,3 +61,9 @@ def get_overview():
     overview = load_overview_data()
 
     return overview
+
+@app.get("/accounts")
+def get_accounts():
+    accounts = load_accounts()
+
+    return accounts
