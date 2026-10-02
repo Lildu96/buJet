@@ -1,13 +1,13 @@
 import { useLayoutEffect, useEffect, useState } from "react";
-import { StyleSheet, View, Pressable } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import API_URL from "@/api/budget_api"
 import AppText from '@/components/AppText';
 import HomeButton from '@/components/HomeButton';
 import MainButton from "@/components/MainButton";
-import Notification from "@/components/Notification";
 import { usePageTransition } from "@/utils/pageAnimations";
+import { useZoomAnimation } from "@/utils/zoomAnimation";
 
 export default function Overview() {
 
@@ -16,8 +16,14 @@ export default function Overview() {
     expenseTotal: 0,
     remainingBudget: 0,
   })
-  const [selectedType, setSelectedType] = useState("expense");
 
+  // Zoom transition and states for expense/income buttons
+  const [selectedType, setSelectedType] = useState("expense");
+  const isExpenseActive = selectedType === "expense"
+
+  const expenseZoomStyle = useZoomAnimation(isExpenseActive)
+
+  // Load backend
   async function loadOverview() {
     const response = await fetch(`${API_URL}/overview`);
     const data = await response.json();
@@ -29,6 +35,18 @@ export default function Overview() {
     })
   }
 
+  useEffect(() => {
+    loadOverview();
+  }, []);
+
+  // Page load transition
+  const {slideAnimatedStyle, slideInFromRight, slideHome } = usePageTransition();
+  
+  useLayoutEffect(() => {
+    slideInFromRight();
+  }, []);
+
+  //Buttons and functionality
   function showExpenses() {
     setSelectedType("expense");
   }
@@ -37,42 +55,24 @@ export default function Overview() {
     setSelectedType("income");
   }
 
-  const {slideAnimatedStyle, slideInFromRight, slideHome } = usePageTransition();
-
-  useLayoutEffect(() => {
-      slideInFromRight();
-  }, []);
-
-  useEffect(() => {
-    loadOverview();
-  }, []);
-
   function showBudget() {}
 
   function showPersonal() {}
 
   function showJet() {} 
 
-  function ExpenseAccountButtons() {
+  function ExpenseButtons() {
     return (
-    <View style={styles.expenseButtons}>
+    <Animated.View style={[ styles.expenseButtons, expenseZoomStyle ]}>
       <MainButton wrapperStyle={styles.accountButtonWrapper} title="Budget" onPress={showBudget}/>
       <MainButton wrapperStyle={styles.accountButtonWrapper} title="Personal" onPress={showPersonal}/>
       <MainButton wrapperStyle={styles.accountButtonWrapper} title="Jet" onPress={showJet}/>
-    </View>
+    </Animated.View>
     )
-  }
-
-  let expenseButtons = null
-
-  if (selectedType == "expense") {
-    expenseButtons = <ExpenseAccountButtons/>
-  }
+  };
   
   return (
       <View style={styles.screen}>
-          {/* <Notification message={message} type={notificationType}/> */}
-
           <View style={styles.header}>
               <Animated.View style={[slideAnimatedStyle, styles.headerContent]}>
                   <HomeButton onPress={slideHome}/>
@@ -87,7 +87,7 @@ export default function Overview() {
 
           <View style={styles.main}>
               <Animated.View style={[styles.dataContainer, slideAnimatedStyle]}>
-                {expenseButtons}
+                <ExpenseButtons/>
                 <View>
                   <AppText>Income: £{overview.incomeTotal}</AppText>
                   <AppText>Expenses: £{overview.expenseTotal}</AppText>
@@ -142,7 +142,6 @@ headerContent:{
     padding: 50,
     alignItems: "center",
     width: "80%",
-    // gap: 50,
     borderRadius: 50,
   },
   expenseButtons: {
