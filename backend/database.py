@@ -120,30 +120,6 @@ def reset_budget_data():
     connection.commit()
     connection.close()
 
-def load_overview_data():
-    connection = sqlite3.connect(DB_PATH)
-    cursor = connection.cursor()
-
-    cursor.execute(
-        "SELECT SUM(amount) FROM transactions WHERE type = 'income'",
-    )
-    income_total = cursor.fetchone()[0] or 0
-
-    cursor.execute(
-        "SELECT SUM(amount) FROM transactions WHERE type ='expense'",
-    )
-    expense_total = cursor.fetchone()[0] or 0
-
-    remaining_budget = income_total - expense_total
-    
-    connection.close()
-
-    return {
-        "income_total": income_total,
-        "expense_total": expense_total,
-        "remaining_budget": income_total - expense_total,
-    }
-
 def load_accounts():
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
@@ -165,7 +141,45 @@ def load_accounts():
 
     connection.close()
     return formatted_accounts
+
+def load_overview_data():
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    account_names = [ "Budget", "Personal", "Jet" ]
+    account_summaries = {}
+
+    # Fetch and calculate remaining amount for all accounts
+    for account_name in account_names:
+        cursor.execute(
+            "SELECT id FROM accounts WHERE name = ?",
+            (account_name,)
+        )
+        account = cursor.fetchone()
+        account_id = account[0]
+
+        cursor.execute(
+            "SELECT SUM(amount) FROM transactions WHERE type = 'income' AND account_id = ?",
+            (account_id,)
+        )
+        income = cursor.fetchone()[0] or 0
+
+        cursor.execute(
+            "SELECT SUM(amount) FROM transactions WHERE type ='expense' AND account_id = ?",
+            (account_id,)
+        )
+        expense = cursor.fetchone()[0] or 0
+
+        remaining = income - expense
+
+        account_summaries[account_name.lower()] = { 
+            "income": income,
+            "expense": expense,
+            "remaining":  remaining
+        }
     
+    connection.close()
 
-
-# load_overview_data()
+    return {
+        "accounts": account_summaries,
+    }

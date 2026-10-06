@@ -12,15 +12,17 @@ import { useZoomAnimation } from "@/utils/zoomAnimation";
 export default function Overview() {
 
   const [overview, setOverview] = useState({
-    incomeTotal:0,
-    expenseTotal: 0,
-    remainingBudget: 0,
+    budgetRemaining: 0,
+    personalRemaining: 0,
+    jetRemaining: 0,
   })
 
-  // Zoom transition and states for expense/income buttons
+  // Page default states
   const [selectedType, setSelectedType] = useState("expense");
-  const isExpenseActive = selectedType === "expense"
+  const [selectedAccount, setSelectedAccount] = useState< "budget" | "personal" | "jet" | null >(null);
 
+  // Expense/Income button animation
+  const isExpenseActive = selectedType === "expense"
   const expenseZoomStyle = useZoomAnimation(isExpenseActive)
 
   // Load backend
@@ -28,11 +30,11 @@ export default function Overview() {
     const response = await fetch(`${API_URL}/overview`);
     const data = await response.json();
 
-    setOverview({
-      incomeTotal: data.income_total,
-      expenseTotal: data.expense_total,
-      remainingBudget: data.remaining_budget,
-    })
+    setOverview({ 
+      budgetRemaining: data.accounts.budget.remaining,
+      personalRemaining: data.accounts.personal.remaining,
+      jetRemaining: data.accounts.jet.remaining 
+    });
   }
 
   useEffect(() => {
@@ -55,18 +57,30 @@ export default function Overview() {
     setSelectedType("income");
   }
 
-  function showBudget() {}
+  function showBudget() {
+    setSelectedAccount("budget");
+  }
 
-  function showPersonal() {}
+  function showPersonal() {
+    setSelectedAccount("personal");
+  }
 
-  function showJet() {} 
+  function showJet() {
+    setSelectedAccount("jet");
+  } 
 
   function ExpenseButtons() {
+    const buttonSubtitles = {
+      budget: `£${overview.budgetRemaining}`,
+      personal: `£${overview.personalRemaining}`,
+      jet: `£${overview.jetRemaining}`,
+    };
+
     return (
     <Animated.View style={[ styles.expenseButtons, expenseZoomStyle ]}>
-      <MainButton wrapperStyle={styles.accountButtonWrapper} title="Budget" onPress={showBudget}/>
-      <MainButton wrapperStyle={styles.accountButtonWrapper} title="Personal" onPress={showPersonal}/>
-      <MainButton wrapperStyle={styles.accountButtonWrapper} title="Jet" onPress={showJet}/>
+      <MainButton wrapperStyle={styles.accountButtonWrapper} title="Budget" subtitle={buttonSubtitles.budget} onPress={showBudget}/>
+      <MainButton wrapperStyle={styles.accountButtonWrapper} title="Personal" subtitle={buttonSubtitles.personal} onPress={showPersonal}/>
+      <MainButton wrapperStyle={styles.accountButtonWrapper} title="Jet" subtitle={buttonSubtitles.jet} onPress={showJet}/>
     </Animated.View>
     )
   };
@@ -88,11 +102,6 @@ export default function Overview() {
           <View style={styles.main}>
               <Animated.View style={[styles.dataContainer, slideAnimatedStyle]}>
                 <ExpenseButtons/>
-                <View>
-                  <AppText>Income: £{overview.incomeTotal}</AppText>
-                  <AppText>Expenses: £{overview.expenseTotal}</AppText>
-                  <AppText>Remaining: £{overview.remainingBudget}</AppText>
-                </View>
               </Animated.View>
           </View>
       </View>

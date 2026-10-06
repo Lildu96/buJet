@@ -4,15 +4,20 @@ import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-nati
 
 
 type MainButtonProps = {
-  title: string;
-  onPress: () => void;
-  wrapperStyle?: StyleProp<ViewStyle>;
-  buttonStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
-
+    title: string;
+    onPress: () => void;
+    wrapperStyle?: StyleProp<ViewStyle>;
+    buttonStyle?: StyleProp<ViewStyle>;
+    textStyle?: StyleProp<TextStyle>;
+    subtitle?: string;
 }
 
-export default function MainButton({ title, onPress, buttonStyle, textStyle, wrapperStyle }: MainButtonProps) {
+export default function MainButton({ title, onPress, buttonStyle, textStyle, wrapperStyle, subtitle }: MainButtonProps) {
+    let subtitleContent = null
+    if (subtitle) {
+        subtitleContent = <AppText style={styles.subtitle}>{subtitle}</AppText>
+    }
+
     const glow = useSharedValue(0);
     const scale = useSharedValue(1);
     const scaleTiming = {
@@ -55,10 +60,12 @@ export default function MainButton({ title, onPress, buttonStyle, textStyle, wra
                     onBlur={blurStyling}
                     onPress={onPress}
                     style={styles.pressable}
+
                 >
                     {({ hovered, pressed }) => (
                         <View style={[styles.button, buttonStyle, (hovered || pressed) && styles.buttonActive]}>                        
                             <AppText style={[styles.text, (hovered || pressed) && styles.textActive, textStyle]}>{title}</AppText>
+                            {subtitleContent}
                         </View>
                     )}
                 </Pressable>
@@ -97,5 +104,10 @@ const styles = StyleSheet.create({
     },
     textActive: {
         color: '#f8f8f2'
-    }
+    },
+    subtitle: {
+        fontSize: 16,
+        marginTop: 4,
+        marginBottom: -13
+    },
 })
