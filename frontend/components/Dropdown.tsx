@@ -11,8 +11,6 @@ type DropdownProps = {
     placeholder?: string;
 };
 
-
-
 export default function Dropdown({ label, option, selected, onSelect, placeholder = "Select Option" }: DropdownProps) {
     const [searchText, setSearchText] = useState("");
     const filteredOptions = option.filter((item) => 

@@ -5,6 +5,7 @@ import Notification from "@/components/Notification";
 import GlowInput from "@/components/GlowInput"
 import CurrencyInput from '@/components/CurrencyInput';
 import Dropdown from "@/components/Dropdown";
+import Checkbox from '@/components/Checkbox';
 import { usePageTransition } from '@/utils/pageAnimations';
 import { useLayoutEffect, useState, useEffect } from "react";
 import { StyleSheet, View, } from "react-native";
@@ -27,7 +28,7 @@ export default function AddExpenseScreen() {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
 
-  const isMonthly = useState(false);
+  const [isMonthly, setIsMonthly] = useState(false);
 
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -125,6 +126,11 @@ export default function AddExpenseScreen() {
                 option={accountNames}
                 selected={selectedAccount}
                 onSelect={setSelectedAccount}
+              />
+              <Checkbox
+                label="Repeat monthly"
+                checked = {isMonthly}
+                onPress={() => setIsMonthly(!isMonthly)}
               />
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
             </Animated.View>
