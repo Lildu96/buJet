@@ -8,7 +8,7 @@ import Dropdown from "@/components/Dropdown";
 import Checkbox from '@/components/Checkbox';
 import { usePageTransition } from '@/utils/pageAnimations';
 import { useLayoutEffect, useState, useEffect } from "react";
-import { StyleSheet, View, } from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
 import Animated from 'react-native-reanimated';
 import { addExpense, getLibrary, getAccounts } from "@/api/budget_api";
 
@@ -28,19 +28,38 @@ export default function AddExpenseScreen() {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
 
-  const [isMonthly, setIsMonthly] = useState(false);
-
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-
+  
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [selectedAccount, setSelectedAccount] = useState("");
   const accountNames = accounts.map((account) => account.name);
+
+  //Checkbox variables
+  const [isMonthly, setIsMonthly] = useState(false);
+  const [dayOfMonth, setDayOfMonth] = useState("");
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
   const [amountError, setAmountError] = useState("");
+
+  //Creates text input for checkbox
+  const monthlyDayInput = isMonthly ? (
+    <View style={styles.dayContainer}>
+      <AppText style={styles.dayLabel}>Day</AppText>
+
+      <TextInput
+        style={styles.dayInput}
+        value={dayOfMonth}
+        onChangeText={setDayOfMonth}
+        keyboardType="number-pad"
+        maxLength={2}
+        placeholder="1"
+        placeholderTextColor="#6672a2"
+      />
+    </View>
+  ) : null;
 
   useEffect(() => {
     async function loadFormOptions() {
@@ -127,11 +146,14 @@ export default function AddExpenseScreen() {
                 selected={selectedAccount}
                 onSelect={setSelectedAccount}
               />
-              <Checkbox
-                label="Repeat monthly"
-                checked = {isMonthly}
-                onPress={() => setIsMonthly(!isMonthly)}
-              />
+              <View style={styles.monthlyRow}>
+                <Checkbox
+                  label="Repeat monthly"
+                  checked = {isMonthly}
+                  onPress={() => setIsMonthly(!isMonthly)}
+                />
+                {monthlyDayInput}
+              </View>
               <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
             </Animated.View>
         </View>
@@ -167,6 +189,34 @@ const styles = StyleSheet.create({
     width: "80%",
     gap: 50,
     borderRadius: 50,
+  },
+  monthlyRow: {
+    width: "50%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  dayContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  dayLabel: {
+    fontSize: 17,
+  },
+  dayInput: {
+    width: 60,
+    paddingVertical: 8,
+    // paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: "#9d91ef",
+    borderRadius: 8,
+    backgroundColor: "rgba(157, 145, 239, 0.2)",
+    color: "#6672a2",
+    // fontFamily: "Geom_600SemiBold",
+    fontSize: 17,
+    textAlign: "center",
+    outlineStyle: "none" as any,
   },
   buttonWrapper: {
     marginTop: 50,

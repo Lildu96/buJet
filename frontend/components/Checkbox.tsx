@@ -44,7 +44,7 @@ const styles= StyleSheet.create({
         gap: 10,
         flexDirection: "row",
         alignItems: "center",
-        width: "50%",
+        // width: "50%",
     },
     box: {
         width: 25,
