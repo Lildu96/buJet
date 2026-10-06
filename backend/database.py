@@ -39,6 +39,23 @@ def init_budget_db():
             type TEXT NOT NULL,
             account_id INTEGER NOT NULL,
             category_id INTEGER NOT NULL,
+            recurring_transaction_id INTEGER,
+            FOREIGN KEY (recurring_transaction_id) REFERENCES recurring_transactions(id),
+            FOREIGN KEY (account_id) REFERENCES accounts(id),
+            FOREIGN KEY (category_id) REFERENCES categories(id)
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS recurring_transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            day_of_month NOT NULL,
+            description TEXT,
+            amount REAL NOT NULL,
+            type TEXT NOT NULL,
+            account_id INTEGER NOT NULL,
+            category_id INTEGER NOT NULL,
+            active INTEGER NOT NULL DEFAULT 1,
             FOREIGN KEY (account_id) REFERENCES accounts(id),
             FOREIGN KEY (category_id) REFERENCES categories(id)
         )

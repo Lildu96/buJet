@@ -27,6 +27,8 @@ export default function AddExpenseScreen() {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
 
+  const isMonthly = useState(false);
+
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
