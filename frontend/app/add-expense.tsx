@@ -5,7 +5,7 @@ import Notification from "@/components/Notification";
 import GlowInput from "@/components/GlowInput"
 import CurrencyInput from '@/components/CurrencyInput';
 import Dropdown from "@/components/Dropdown";
-import Checkbox from '@/components/Checkbox';
+import RecurringCheckbox from '@/components/RecurringCheckbox';
 import { usePageTransition } from '@/utils/pageAnimations';
 import { useLayoutEffect, useState, useEffect } from "react";
 import { StyleSheet, View, TextInput, ScrollView, ScrollViewComponent } from "react-native";
@@ -43,21 +43,6 @@ export default function AddExpenseScreen() {
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
   const [amountError, setAmountError] = useState("");
-
-  //Creates text input for checkbox
-  const monthlyDayInput = isMonthly ? (
-      <GlowInput
-        containerStyle={styles.dateInputContainer}
-        labelStyle={styles.dateLabel}
-        inputStyle={styles.dateInput}
-        label="Payment Date"
-        value={dayOfMonth}
-        onChangeText={setDayOfMonth}
-        keyboardType="number-pad"
-        maxLength={2}
-        placeholder="1"
-      />
-  ) : null;
 
   useEffect(() => {
     async function loadFormOptions() {
@@ -145,14 +130,12 @@ export default function AddExpenseScreen() {
                   selected={selectedAccount}
                   onSelect={setSelectedAccount}
                 />
-                <View style={styles.monthlyRow}>
-                  <Checkbox
-                    label="Repeat monthly"
-                    checked = {isMonthly}
-                    onPress={() => setIsMonthly(!isMonthly)}
-                  />
-                  {monthlyDayInput}
-                </View>
+                <RecurringCheckbox
+                  checked={isMonthly}
+                  onToggle={setIsMonthly}
+                  dayOfMonth={dayOfMonth}
+                  onChangeDay={setDayOfMonth}
+                />
                 <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
               </ScrollView>
             </Animated.View>
@@ -195,26 +178,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 60,
     gap: 50,
-  },
-  monthlyRow: {
-    width: "50%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  dateInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "auto",
-  },
-  dateLabel: {
-    fontSize: 17,
-    flexShrink: 0,
-    alignSelf: "center",
-  },
-  dateInput: {
-    width: 70,
-    textAlign: "center",
   },
   buttonWrapper: {
     marginTop: 50,
