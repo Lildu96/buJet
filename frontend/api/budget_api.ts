@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "/api";
 export default API_URL;
 
 export async function getLibrary() {
@@ -41,12 +41,17 @@ type ExpenseData = {
     description: string;
     account: string;
     category: string;
+    recurring: boolean;
+    dayOfMonth: number | null;
     createdAt: string;
 }
 
 type IncomeData = {
     amount: number;
     category: string;
+    account: string;
+    recurring: boolean;
+    dayOfMonth: number | null;
     createdAt: string;
 }
 
