@@ -57,12 +57,26 @@ def create_expense(expense_item: dict):
 
 @app.post("/income")
 def create_income(income_item: dict):
+    recurring_id=None
+
+    if income_item["recurring"]:
+        recurring_id=add_recurring_transaction(
+            day_of_month=income_item["dayOfMonth"],
+            description="",
+            amount=income_item["amount"],
+            transaction_type="income",
+            account_name=income_item["account"],
+            category_name=income_item["category"]
+
+        )
+        
     add_transaction(
         date=income_item["createdAt"],
         description="",
         amount=income_item["amount"],
         transaction_type="income",
-        account_name="Personal",
+        recurring_transaction_id=recurring_id,
+        account_name=income_item["account"],
         category_name=income_item["category"]
     )
 
