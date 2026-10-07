@@ -8,7 +8,7 @@ import Dropdown from "@/components/Dropdown";
 import Checkbox from '@/components/Checkbox';
 import { usePageTransition } from '@/utils/pageAnimations';
 import { useLayoutEffect, useState, useEffect } from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput, ScrollView, ScrollViewComponent } from "react-native";
 import Animated from 'react-native-reanimated';
 import { addExpense, getLibrary, getAccounts } from "@/api/budget_api";
 
@@ -46,19 +46,17 @@ export default function AddExpenseScreen() {
 
   //Creates text input for checkbox
   const monthlyDayInput = isMonthly ? (
-    <View style={styles.dayContainer}>
-      <AppText style={styles.dayLabel}>Day</AppText>
-
-      <TextInput
-        style={styles.dayInput}
+      <GlowInput
+        containerStyle={styles.dateInputContainer}
+        labelStyle={styles.dateLabel}
+        inputStyle={styles.dateInput}
+        label="Payment Date"
         value={dayOfMonth}
         onChangeText={setDayOfMonth}
         keyboardType="number-pad"
         maxLength={2}
         placeholder="1"
-        placeholderTextColor="#6672a2"
       />
-    </View>
   ) : null;
 
   useEffect(() => {
@@ -132,29 +130,31 @@ export default function AddExpenseScreen() {
       
         <View style={styles.main}>
             <Animated.View style={[styles.form, slideAnimatedStyle]}>
-              <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateExpense} error={amountError}/>
-              <GlowInput label="Description" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
-              <Dropdown
-                label="Category"
-                option={categories}
-                selected={selectedCategory}
-                onSelect={setSelectedCategory}
-              />
-              <Dropdown
-                label="Account"
-                option={accountNames}
-                selected={selectedAccount}
-                onSelect={setSelectedAccount}
-              />
-              <View style={styles.monthlyRow}>
-                <Checkbox
-                  label="Repeat monthly"
-                  checked = {isMonthly}
-                  onPress={() => setIsMonthly(!isMonthly)}
+              <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateExpense} error={amountError}/>
+                <GlowInput label="Description" value={description} onChangeText={setDescription} placeholder="Enter Description"/>
+                <Dropdown
+                  label="Category"
+                  option={categories}
+                  selected={selectedCategory}
+                  onSelect={setSelectedCategory}
                 />
-                {monthlyDayInput}
-              </View>
-              <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
+                <Dropdown
+                  label="Account"
+                  option={accountNames}
+                  selected={selectedAccount}
+                  onSelect={setSelectedAccount}
+                />
+                <View style={styles.monthlyRow}>
+                  <Checkbox
+                    label="Repeat monthly"
+                    checked = {isMonthly}
+                    onPress={() => setIsMonthly(!isMonthly)}
+                  />
+                  {monthlyDayInput}
+                </View>
+                <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Expense" onPress={handleAddExpense}/>
+              </ScrollView>
             </Animated.View>
         </View>
     </View>
@@ -183,12 +183,18 @@ const styles = StyleSheet.create({
   },
   form: {
     backgroundColor: "rgb(33, 34, 44)",
+    width: "80%",
+    height: "75%",
+    borderRadius: 50,
+  },
+  scroll: {
+    width: "100%",
+  },
+  scrollContent: {
+    alignItems: "center",
     paddingTop: 50,
     paddingBottom: 60,
-    alignItems: "center",
-    width: "80%",
     gap: 50,
-    borderRadius: 50,
   },
   monthlyRow: {
     width: "50%",
@@ -196,27 +202,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  dayContainer: {
+  dateInputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    width: "auto",
   },
-  dayLabel: {
+  dateLabel: {
     fontSize: 17,
+    flexShrink: 0,
+    alignSelf: "center",
   },
-  dayInput: {
-    width: 60,
-    paddingVertical: 8,
-    // paddingHorizontal: 10,
-    borderWidth: 2,
-    borderColor: "#9d91ef",
-    borderRadius: 8,
-    backgroundColor: "rgba(157, 145, 239, 0.2)",
-    color: "#6672a2",
-    // fontFamily: "Geom_600SemiBold",
-    fontSize: 17,
+  dateInput: {
+    width: 70,
     textAlign: "center",
-    outlineStyle: "none" as any,
   },
   buttonWrapper: {
     marginTop: 50,

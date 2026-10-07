@@ -1,12 +1,15 @@
-import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
+import { StyleSheet, StyleProp, ViewStyle, TextStyle, TextInput, TextInputProps, View } from "react-native";
 import AppText from "./AppText"
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated"
 
 type GlowInputProps = TextInputProps & {
     label: string;
+    containerStyle?: StyleProp<ViewStyle>;
+    labelStyle?: StyleProp<TextStyle>;
+    inputStyle?: StyleProp<TextStyle>;
 };
 
-export default function GlowInput({ label, ...textInputProps }: GlowInputProps) {
+export default function GlowInput({ label, containerStyle, labelStyle, inputStyle, ...textInputProps }: GlowInputProps) {
     const glow = useSharedValue(0);
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -16,11 +19,11 @@ export default function GlowInput({ label, ...textInputProps }: GlowInputProps) 
     }));
 
     return (
-        <View style={styles.inputContainer}>
-            <AppText style={styles.label}>{label}</AppText>
+        <View style={[styles.inputContainer, containerStyle]}>
+            <AppText style={[styles.label, labelStyle]}>{label}</AppText>
             <Animated.View style={[styles.inputGlow, animatedStyle]}>
                 <TextInput
-                    style={styles.input} 
+                    style={[styles.input, inputStyle]} 
                     {...textInputProps}
                     autoCapitalize="words"
                     onFocus={() => {
