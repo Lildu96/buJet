@@ -18,9 +18,10 @@
     "Gift"
   ],
   "incomeCategories": [
-    "Gift",
+    "Bank Tranfser",
     "Bills",
     "Salary",
-    "Refund"
+    "Refund",
+    "Gift"
   ]
 }

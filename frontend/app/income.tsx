@@ -9,7 +9,7 @@ import { usePageTransition } from "@/utils/pageAnimations";
 import Animated from "react-native-reanimated";
 import { useLayoutEffect, useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View, } from "react-native";
-import { addIncome, getLibrary } from "@/api/budget_api";
+import { addIncome, getLibrary, getAccounts } from "@/api/budget_api";
 
 type Account = {
   id: number;
@@ -44,8 +44,10 @@ export default function IncomeScreen() {
   useEffect(() => {
       async function loadCategories() {
         const library = await getLibrary();
+              const loadedAccounts = await getAccounts();
   
         setCategories(library.incomeCategories);
+        setAccounts(loadedAccounts);
       }
       
       loadCategories();
@@ -71,6 +73,9 @@ export default function IncomeScreen() {
     const newIncome={
       amount: Number(amount),
       category: selectedCategory,
+      account: selectedAccount,
+      recurring: isMonthly,
+      dayOfMonth: isMonthly ? Number(dayOfMonth) : null,
       createdAt: new Date().toISOString(),
     }
 
