@@ -4,11 +4,17 @@ import HomeButton from '@/components/HomeButton';
 import Notification from "@/components/Notification";
 import Dropdown from "@/components/Dropdown";
 import CurrencyInput from '@/components/CurrencyInput';
+import RecurringCheckbox from '@/components/RecurringCheckbox';
 import { usePageTransition } from "@/utils/pageAnimations";
 import Animated from "react-native-reanimated";
 import { useLayoutEffect, useState, useEffect } from "react";
-import { StyleSheet, View, } from "react-native";
+import { ScrollView, StyleSheet, View, } from "react-native";
 import { addIncome, getLibrary } from "@/api/budget_api";
+
+type Account = {
+  id: number;
+  name: string;
+};
 
 export default function IncomeScreen() {
 
@@ -21,6 +27,14 @@ export default function IncomeScreen() {
   const [amount, setAmount] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState("");
+  const accountNames = accounts.map((account) => account.name);
+
+  //Checkbox variables
+  const [isMonthly, setIsMonthly] = useState(false);
+  const [dayOfMonth, setDayOfMonth] = useState("");
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
@@ -92,14 +106,28 @@ export default function IncomeScreen() {
       
         <View style={styles.main}>
             <Animated.View style={[styles.form, slideAnimatedStyle]}>
-              <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateIncome} error={amountError}/>
-              <Dropdown
-                  label="Category"
-                  option={categories}
-                  selected={selectedCategory}
-                  onSelect={setSelectedCategory}
-              />
-              <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Income" onPress={handleIncome}/>
+              <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>  
+                <CurrencyInput label="Amount" placeholder="0.00" value={amount} onChangeText={setAmount} onBlur={validateIncome} error={amountError}/>
+                <Dropdown
+                    label="Category"
+                    option={categories}
+                    selected={selectedCategory}
+                    onSelect={setSelectedCategory}
+                />
+                <Dropdown
+                    label="Account"
+                    option={accountNames}
+                    selected={selectedAccount}
+                    onSelect={setSelectedAccount}
+                  />
+                  <RecurringCheckbox
+                    checked={isMonthly}
+                    onToggle={setIsMonthly}
+                    dayOfMonth={dayOfMonth}
+                    onChangeDay={setDayOfMonth}
+                  />
+                <MainButton wrapperStyle={styles.buttonWrapper} buttonStyle={styles.button} textStyle={styles.buttonText} title="Add Income" onPress={handleIncome}/>
+              </ScrollView>
             </Animated.View>
         </View>
     </View>
@@ -128,12 +156,18 @@ const styles = StyleSheet.create({
   },
   form: {
     backgroundColor: "rgb(33, 34, 44)",
+    width: "80%",
+    height: "75%",
+    borderRadius: 50,
+  },
+  scroll: {
+    width: "100%",
+  },
+  scrollContent: {
+    alignItems: "center",
     paddingTop: 50,
     paddingBottom: 60,
-    alignItems: "center",
-    width: "80%",
     gap: 50,
-    borderRadius: 50,
   },
   buttonWrapper: {
     marginTop: 50,
