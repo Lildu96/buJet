@@ -1,3 +1,12 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:buJet}/backend/data/budget.db",
+            "name": "BuJet Local"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }
