@@ -83,7 +83,7 @@ def init_budget_db():
     connection.commit()
     connection.close()
 
-def add_transaction(date, description, amount, transaction_type, account_name, category_name):
+def add_transaction(date, description, amount, transaction_type, account_name, category_name, recurring_transaction_id=None):
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
 
@@ -109,12 +109,57 @@ def add_transaction(date, description, amount, transaction_type, account_name, c
             amount,
             type,
             account_id,
+            category_id,
+            recurring_transaction_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            date,
+            description,
+            amount,
+            transaction_type,
+            account_id,
+            category_id,
+            recurring_transaction_id
+        )
+    )
+
+    connection.commit()
+    connection.close()
+
+def add_recurring_transaction(day_of_month, description, amount, transaction_type, account_name, category_name):
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "SELECT id FROM accounts WHERE name = ?",
+        (account_name,)
+    )
+    account = cursor.fetchone()
+    account_id = account[0]
+    
+    cursor.execute(
+        "SELECT id FROM categories WHERE name = ?",
+        (category_name,)
+    )
+    categories = cursor.fetchone()
+    category_id = categories[0]
+
+    cursor.execute(
+        """
+        INSERT INTO recurring_transactions (
+            day_of_month,
+            description,
+            amount,
+            type,
+            account_id,
             category_id
         )
         VALUES (?, ?, ?, ?, ?, ?)
         """,
         (
-            date,
+            day_of_month,
             description,
             amount,
             transaction_type,
@@ -123,8 +168,14 @@ def add_transaction(date, description, amount, transaction_type, account_name, c
         )
     )
 
+    recurring_id = cursor.lastrowid
+
     connection.commit()
     connection.close()
+
+    return recurring_id
+
+
 
 def reset_budget_data():
     connection = sqlite3.connect(DB_PATH)

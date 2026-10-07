@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.database import init_budget_db, add_transaction, load_library, reset_budget_data, load_overview_data, load_accounts
+from backend.database import init_budget_db, add_transaction, add_recurring_transaction, load_library, reset_budget_data, load_overview_data, load_accounts
 
 app = FastAPI()
 
@@ -28,13 +28,27 @@ def reset_data():
 
 @app.post("/expenses")
 def create_expense(expense_item: dict):
+    recurring_id=None
+
+    if expense_item["recurring"]:
+        recurring_id=add_recurring_transaction(
+            day_of_month=expense_item["dayOfMonth"],
+            description=expense_item["description"],
+            amount=expense_item["amount"],
+            transaction_type="expense",
+            account_name=expense_item["account"],
+            category_name=expense_item["category"]
+            )
+        
     add_transaction(
         date=expense_item["createdAt"],
         description=expense_item["description"],
         amount=expense_item["amount"],
         transaction_type="expense",
+        recurring_transaction_id=recurring_id,
         account_name=expense_item["account"],
         category_name=expense_item["category"]
+
     )
 
     return {

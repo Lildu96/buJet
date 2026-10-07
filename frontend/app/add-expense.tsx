@@ -79,6 +79,8 @@ export default function AddExpenseScreen() {
       description,
       category: selectedCategory,
       account: selectedAccount,
+      recurring: isMonthly,
+      dayOfMonth: isMonthly ? Number(dayOfMonth) : null,
       createdAt: new Date().toISOString(),
     }
 
