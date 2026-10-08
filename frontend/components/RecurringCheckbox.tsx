@@ -1,10 +1,12 @@
 import Checkbox from "./Checkbox";
 import GlowInput from "./GlowInput";
+import FieldError from "./FieldError";
 import { useZoomAnimation } from "@/utils/zoomAnimation";
 
 import Animated from "react-native-reanimated";
 
 import { StyleSheet, View, } from "react-native";
+import { useState } from "react";
 
 type RecurringCheckboxProps = {
     checked:  boolean;
@@ -15,6 +17,27 @@ type RecurringCheckboxProps = {
 
 export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onChangeDay }: RecurringCheckboxProps) {
     const dateZoomStyle = useZoomAnimation(checked)
+
+    const [dayError, setDayError] = useState("")
+
+    function validateDay() {
+        if (!checked){
+            setDayError("");
+            return true;
+        }
+
+        const day = Number(dayOfMonth)
+        if (!dayOfMonth) {
+        setDayError("Please enter a payment date");
+        return false;
+        } else if (day < 1 || day > 31 || !Number.isInteger(day)) {
+            setDayError("Please enter a date between 1 and 31")
+            return false;
+        }
+
+        setDayError("");
+        return true;
+    }
 
     return (
         <View style={styles.monthlyRow}>
@@ -34,7 +57,9 @@ export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onCha
                     keyboardType="number-pad"
                     maxLength={2}
                     placeholder="1"
+                    onBlur={validateDay}
                 />
+                <FieldError message={dayError}/>
             </Animated.View>
         </View>
     )

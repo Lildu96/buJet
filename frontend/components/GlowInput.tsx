@@ -9,7 +9,7 @@ type GlowInputProps = TextInputProps & {
     inputStyle?: StyleProp<TextStyle>;
 };
 
-export default function GlowInput({ label, containerStyle, labelStyle, inputStyle, ...textInputProps }: GlowInputProps) {
+export default function GlowInput({ label, containerStyle, labelStyle, inputStyle, onBlur, ...textInputProps }: GlowInputProps) {
     const glow = useSharedValue(0);
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -29,8 +29,9 @@ export default function GlowInput({ label, containerStyle, labelStyle, inputStyl
                     onFocus={() => {
                         glow.value = withTiming(1, {duration: 150,});
                     }}
-                    onBlur={() => {
+                    onBlur={(event) => {
                         glow.value = withTiming(0, {duration: 200,});
+                        onBlur?.(event);
                     }}
                 />
             </Animated.View>
