@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.database import init_budget_db, add_transaction, add_recurring_transaction, load_library, reset_budget_data, load_overview_data, load_accounts
+from backend.environment import is_development
 
 app = FastAPI()
 
@@ -20,6 +21,12 @@ def get_library():
 
 @app.post("/reset-data")
 def reset_data():
+    if not is_development():
+        raise HTTPException(
+            status_code=403,
+            detail="Data reset is disabled outside development"
+        )
+
     reset_budget_data()
 
     return {

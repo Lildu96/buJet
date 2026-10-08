@@ -19,6 +19,7 @@ export default function Index() {
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
 
+  const showDevTools = __DEV__;
   const handleResetData = async () => {
     try {
       await resetData();
@@ -50,7 +51,9 @@ export default function Index() {
             <MainButton title="Add Income" onPress={() => slideToPage("/income")}/>
             <MainButton title="Add Expense" onPress={() => slideToPage("/add-expense")}/>
             <MainButton title="Overview" onPress={() => slideToPage("/overview")}/>
-            <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
+            {showDevTools && (
+              <MainButton title="Reset Data (Dev)" onPress={handleResetData}/>
+            )}
           </Animated.View>
         </View>
     </View>
