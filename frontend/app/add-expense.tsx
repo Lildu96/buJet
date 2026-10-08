@@ -72,7 +72,7 @@ export default function AddExpenseScreen() {
   async function handleAddExpense() {
     const isValid = validateExpense();
     const isRecurringValid = isValidRecurringDay(isMonthly, dayOfMonth)
-    
+
     setValidationTrigger(previous => previous + 1);
     
     if (!isValid || !isRecurringValid) {
@@ -97,6 +97,8 @@ export default function AddExpenseScreen() {
           setDescription("");
           setSelectedCategory("");
           setSelectedAccount("");
+          setIsMonthly(false);
+          setDayOfMonth("");
       
           setNotificiationType("success");
           setMessage("Expenses saved successfully");

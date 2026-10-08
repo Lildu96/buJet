@@ -89,6 +89,9 @@ export default function IncomeScreen() {
           // Reset Form
           setAmount("");
           setSelectedCategory("");
+          setSelectedAccount("");
+          setIsMonthly(false);
+          setDayOfMonth("");
 
           setNotificiationType("success");
           setMessage("Income saved successfully");
