@@ -1,13 +1,14 @@
 import { ReactNode, useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, StyleProp, ViewStyle } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import AppText from "./AppText"
 
 type FieldErrorProps = {
     message?: string;
+    style?: StyleProp<ViewStyle>;
 }
 
-export default function FieldError({ message }: FieldErrorProps) {
+export default function FieldError({ message, style }: FieldErrorProps) {
     const opacity = useSharedValue(0);
     const height = useSharedValue(0);
 
@@ -28,7 +29,7 @@ export default function FieldError({ message }: FieldErrorProps) {
     }, [message]);
 
     return(
-        <Animated.View style={animatedStyle}>
+        <Animated.View style={[animatedStyle, style]}>
             <AppText style={styles.errorText}>{message}</AppText>
         </Animated.View>
     ); 

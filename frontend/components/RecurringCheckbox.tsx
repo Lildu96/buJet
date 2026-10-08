@@ -46,29 +46,37 @@ export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onCha
         }
     }, [validationTrigger]);
 
+    useEffect(() => {
+        if (!checked) {
+            setDayError("");
+        }
+    }, [checked]);
+
 
     return (
         <View style={styles.monthlyRow}>
-            <Checkbox
-                label="Repeat monthly"
-                checked={checked}
-                onPress={() => onToggle(!checked)}
-            />
-            <Animated.View style={dateZoomStyle}>
-                <GlowInput
-                    containerStyle={styles.dateInputContainer}
-                    labelStyle={styles.dateLabel}
-                    inputStyle={styles.dateInput}
-                    label="Payment Date"
-                    value={dayOfMonth}
-                    onChangeText={onChangeDay}
-                    keyboardType="number-pad"
-                    maxLength={2}
-                    placeholder="1"
-                    onBlur={validateDay}
+            <View style={styles.controlsRow}>
+                <Checkbox
+                    label="Repeat monthly"
+                    checked={checked}
+                    onPress={() => onToggle(!checked)}
                 />
-                <FieldError message={dayError}/>
-            </Animated.View>
+                <Animated.View style={dateZoomStyle}>
+                    <GlowInput
+                        containerStyle={styles.dateInputContainer}
+                        labelStyle={styles.dateLabel}
+                        inputStyle={styles.dateInput}
+                        label="Payment Date"
+                        value={dayOfMonth}
+                        onChangeText={onChangeDay}
+                        keyboardType="number-pad"
+                        maxLength={2}
+                        placeholder="1"
+                        onBlur={validateDay}
+                    />
+                </Animated.View>
+            </View>
+            <FieldError message={dayError} style={styles.error}/>
         </View>
     )
 };
@@ -76,6 +84,8 @@ export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onCha
 const styles =StyleSheet.create ({
     monthlyRow: {
         width: "50%",
+    },
+    controlsRow: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
@@ -93,5 +103,8 @@ const styles =StyleSheet.create ({
     dateInput: {
         width: 70,
         textAlign: "center",
+    },
+    error: {
+        alignSelf: "flex-end",
     },
 });
