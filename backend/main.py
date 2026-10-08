@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.database import init_budget_db, add_transaction, add_recurring_transaction, load_library, reset_budget_data, load_overview_data, load_accounts
 from backend.environment import is_development
+from recurring_validation import validate_recurring_day
 
 app = FastAPI()
 
@@ -35,6 +36,7 @@ def reset_data():
 
 @app.post("/expenses")
 def create_expense(expense_item: dict):
+    validate_recurring_day(expense_item["recurring"], expense_item.get("dayOfMonth"))
     recurring_id=None
 
     if expense_item["recurring"]:
@@ -64,6 +66,7 @@ def create_expense(expense_item: dict):
 
 @app.post("/income")
 def create_income(income_item: dict):
+    validate_recurring_day(income_item["recurring"], income_item.get("dayOfMonth"))
     recurring_id=None
 
     if income_item["recurring"]:
