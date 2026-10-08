@@ -6,16 +6,17 @@ import { useZoomAnimation } from "@/utils/zoomAnimation";
 import Animated from "react-native-reanimated";
 
 import { StyleSheet, View, } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type RecurringCheckboxProps = {
     checked:  boolean;
     onToggle: (checked: boolean) => void;
     dayOfMonth: string;
     onChangeDay: (value: string) => void;
+    validationTrigger: number;
 };
 
-export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onChangeDay }: RecurringCheckboxProps) {
+export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onChangeDay, validationTrigger }: RecurringCheckboxProps) {
     const dateZoomStyle = useZoomAnimation(checked)
 
     const [dayError, setDayError] = useState("")
@@ -38,6 +39,13 @@ export default function RecurringCheckbox({ checked, onToggle, dayOfMonth, onCha
         setDayError("");
         return true;
     }
+
+    useEffect(() => {
+        if (validationTrigger > 0){
+            validateDay();
+        }
+    }, [validationTrigger]);
+
 
     return (
         <View style={styles.monthlyRow}>

@@ -6,6 +6,7 @@ import Dropdown from "@/components/Dropdown";
 import CurrencyInput from '@/components/CurrencyInput';
 import RecurringCheckbox from '@/components/RecurringCheckbox';
 import { usePageTransition } from "@/utils/pageAnimations";
+import { isValidRecurringDay } from '@/utils/recurringValidation';
 import Animated from "react-native-reanimated";
 import { useLayoutEffect, useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View, } from "react-native";
@@ -35,6 +36,7 @@ export default function IncomeScreen() {
   //Checkbox variables
   const [isMonthly, setIsMonthly] = useState(false);
   const [dayOfMonth, setDayOfMonth] = useState("");
+  const [validationTrigger, setValidationTrigger] = useState(0)
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
@@ -65,8 +67,11 @@ export default function IncomeScreen() {
 
   async function handleIncome() {
     const isValid = validateIncome();
+    const isRecurringValid = isValidRecurringDay(isMonthly, dayOfMonth)
 
-    if (!isValid) {
+    setValidationTrigger(previous => previous + 1);
+
+    if (!isValid || !isRecurringValid) {
         return;
     }
 
@@ -126,6 +131,7 @@ export default function IncomeScreen() {
                     onSelect={setSelectedAccount}
                   />
                   <RecurringCheckbox
+                    validationTrigger={validationTrigger}
                     checked={isMonthly}
                     onToggle={setIsMonthly}
                     dayOfMonth={dayOfMonth}

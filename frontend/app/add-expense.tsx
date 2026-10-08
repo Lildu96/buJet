@@ -7,6 +7,7 @@ import CurrencyInput from '@/components/CurrencyInput';
 import Dropdown from "@/components/Dropdown";
 import RecurringCheckbox from '@/components/RecurringCheckbox';
 import { usePageTransition } from '@/utils/pageAnimations';
+import { isValidRecurringDay } from '@/utils/recurringValidation';
 import { useLayoutEffect, useState, useEffect } from "react";
 import { StyleSheet, View, TextInput, ScrollView, ScrollViewComponent } from "react-native";
 import Animated from 'react-native-reanimated';
@@ -38,6 +39,7 @@ export default function AddExpenseScreen() {
   //Checkbox variables
   const [isMonthly, setIsMonthly] = useState(false);
   const [dayOfMonth, setDayOfMonth] = useState("");
+  const [validationTrigger, setValidationTrigger] = useState(0)
 
   const [message, setMessage] = useState("");
   const [notificationType, setNotificiationType] = useState<"success" | "error">("success");
@@ -69,10 +71,14 @@ export default function AddExpenseScreen() {
 
   async function handleAddExpense() {
     const isValid = validateExpense();
-
-    if (!isValid) {
+    const isRecurringValid = isValidRecurringDay(isMonthly, dayOfMonth)
+    
+    setValidationTrigger(previous => previous + 1);
+    
+    if (!isValid || !isRecurringValid) {
         return;
     }
+
 
     const newExpense ={
       amount: Number(amount),
@@ -133,6 +139,7 @@ export default function AddExpenseScreen() {
                   onSelect={setSelectedAccount}
                 />
                 <RecurringCheckbox
+                  validationTrigger={validationTrigger}
                   checked={isMonthly}
                   onToggle={setIsMonthly}
                   dayOfMonth={dayOfMonth}
