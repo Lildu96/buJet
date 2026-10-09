@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.database import init_budget_db, add_transaction, add_recurring_transaction, load_library, reset_budget_data, load_overview_data, load_accounts
 from backend.environment import is_development
-from recurring_validation import validate_recurring_day
+from backend.recurring_validation import validate_recurring_day
 
 app = FastAPI()
 
